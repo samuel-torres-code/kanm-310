@@ -7,6 +7,6 @@ XAMPP is really weird.
 
 It basically serves whatever you have in the htdocs/ folder on the localhost.
 
-To make this webpage render on `localhost/kanm-310` you need to clone this repo in the XAMPP application files.
+To make this webpage render on `localhost/kanm-310` you need to clone this repo in the XAMPP application files, specificall.
 
 This is found in `Applications/XAMPP/htdocs` on Mac.
