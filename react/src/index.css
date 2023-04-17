@@ -1,3 +1,14 @@
+body {
+  /* font-family: 'Chivo', sans-serif !important; */
+  font-family: 'Inconsolata', monospace !important;
+  background-color: #f2f2f2;
+}
+
+.navbar, nav {
+  font-family: 'Chivo', sans-serif !important;
+
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,6 +24,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+
+
+
 
 a {
   font-weight: 500;
