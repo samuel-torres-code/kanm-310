@@ -2,14 +2,16 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Logo from '../assets/logo.png'
+import './Header.css'
 
 function Header() {
+    
   return (
     <div>
-      <Navbar bg="light" expand="lg">
+      <Navbar expand="lg">
         
-        <LinkContainer to="/">
-        <Navbar.Brand href="#home">
+        
+        <Navbar.Brand className="mx-3">
             <img
               alt=""
               src={Logo}
@@ -18,7 +20,7 @@ function Header() {
               className="d-inline-block align-top"
             />{' '}
           </Navbar.Brand>
-        </LinkContainer>
+        
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
