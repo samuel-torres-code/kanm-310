@@ -30,10 +30,25 @@ function Shows() {
     .then(response => response.json())
     .then(data => {
       setShowData(data);
-      setIsLoading(false);
+      if(data !== null) {
+        setIsLoading(false);
+      }
     });
 
 }, []);
+useEffect(() => {
+  setIsLoading(true);
+  // Make a GET request to the PHP backend function
+  fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
+  .then(response => response.json())
+  .then(data => {
+    setShowData(data);
+    if(data !== null) {
+      setIsLoading(false);
+    }
+  });
+
+}, [id]);
 
   const convertTimeText = (text: String) => {
     let hour = parseInt(text.slice(10).split(":")[0]);

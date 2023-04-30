@@ -8,6 +8,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Logo from "../assets/logo.png";
 import "./Header.css";
 import useAdmin from "../hooks/useAdmin";
+import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import LoginModal from "./LoginModal";
 
 function Header() {
@@ -16,11 +17,13 @@ function Header() {
   const [isAdmin, setIsAdmin] = useAdmin();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const [userID, setUserID] = useState<String>();
+  const [userID, setUserID] = useLocalStorageUserID();
 
   const handleLogin = (username: string, password: string) => {
     console.log(username,password);
+    setUserID("1");
   };
+
   
 
   return (
@@ -56,7 +59,7 @@ function Header() {
                 <LinkContainer to="/users">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/shows/2">
+                <LinkContainer to={`/shows/${userID}`}>
                   <Nav.Link>My Show</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/userschedule">
@@ -81,12 +84,16 @@ function Header() {
             >
               Admin
             </ToggleButton>
+            {!userID && <>
             <button onClick={() => setShowLoginModal(true)}>Login</button>
             <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
               onLogin={handleLogin}
             />
+            </>
+  }
+  {userID && <><button onClick={() => setShowLoginModal(true)}>Login</button></>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
