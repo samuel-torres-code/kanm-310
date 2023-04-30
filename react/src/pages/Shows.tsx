@@ -1,8 +1,9 @@
 import { Button, Image, Row, Col } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ShowData } from './types.js';
+import type { ShowData, Comment } from './types.js';
 import { days } from './types.js';
+import Table from 'react-bootstrap/Table';
 
 function Shows() {
   const { id } = useParams<{id: string}>();
@@ -16,6 +17,8 @@ function Shows() {
     day_of_week: 0,
   });
 
+  const [comments, setComments] = useState<Comment[]>([]);
+
   
   useEffect(() => {
     // Make a GET request to the PHP backend function
@@ -24,6 +27,7 @@ function Shows() {
     .then(data => setShowData(data));
 
 }, []);
+
   const convertTimeText = (text: String) => {
     let hour = parseInt(text.slice(10).split(":")[0]);
     let meridiem = (hour >= 12) ? "PM" : "AM";
@@ -31,6 +35,15 @@ function Shows() {
     hour = (hour == 0) ? 12 : hour;
     return hour + meridiem;
   };
+
+  useEffect(() => {
+    // Make a GET request to the PHP backend function
+    fetch(`http://localhost/kanm-310/react/php/getComments.php?function=getComments&input=${id}`)
+    .then(response => response.json())
+    .then(data => setComments(data));
+}, []);
+
+  console.log(comments);
 
   return (
     <div>
@@ -49,6 +62,29 @@ function Shows() {
           </Button>
         </Col>
       </Row>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+          <th>Timestamp</th>
+          <th>Comment Text</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comments
+          .sort((obj1, obj2) => {
+              if (obj1.comment_id > obj2.comment_id) return 1;
+              if (obj2.comment_id > obj1.comment_id) return -1;
+              return 0;
+            })
+          .map((comment) => (
+          <tr>
+              <td>{comment.time_stamp}</td>
+              <td>{comment.comment_text}</td>
+          </tr>
+            ))}
+        </tbody>
+      </Table>
       
     </div>
   );

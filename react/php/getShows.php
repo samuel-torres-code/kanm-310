@@ -5,7 +5,6 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-// This is a simple example of a PHP backend function that returns the current date and time
 function getShows() {
     $servername = "localhost";
     $username = "root";
