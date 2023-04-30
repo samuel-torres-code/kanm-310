@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import internal from 'stream';
+import { ShowData } from './types';
 
 
 function ShowSchedule() {
 
-    const [shows, setShows] = useState<Show[]>([]);
+    const [shows, setShows] = useState<ShowData[]>([]);
 
     useEffect(() => {
         // Make a GET request to the PHP backend function
@@ -14,15 +15,7 @@ function ShowSchedule() {
         .then(data => setShows(data));
     }, []);
 
-    type Show = {
-        show_name: string;
-        show_desc: string;
-        start_time: string;
-        end_time: string;
-        day_of_week: number;
-      };      
-
-    console.log(shows);
+    
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -36,6 +29,7 @@ function ShowSchedule() {
                     <th>End Time</th>
                     <th>Show Name</th>
                     <th>Show Description</th>
+                    <th>Show Picture</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +48,7 @@ function ShowSchedule() {
                         <td>{show.end_time.slice(10)}</td>
                         <td>{show.show_name}</td>
                         <td>{show.show_desc}</td>
+                        <td>{show.show_pic}</td>
                     </tr>
                     ))}
                 </tbody>
