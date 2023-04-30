@@ -28,7 +28,7 @@ function UserHeader() {
             <LinkContainer to="/users">
               <Nav.Link>My Profile</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/show">
+            <LinkContainer to="/shows/1">
               <Nav.Link>My Show</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/userschedule">
