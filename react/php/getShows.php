@@ -30,12 +30,39 @@ function getShows() {
     $conn->close();
 }
 
+function getShowData($id) {
+  include_once './dbconfig.php';
+  
+  $sql = "SELECT * FROM shows where show_id = {$id}";
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows[0]);
+
+    $conn->close();
+    
+}
+
 // Check if the request method is GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   // Check if the request is for the getCurrentDateTime function
   if ($_GET['function'] === 'getShows') {
     // Call the function and return the result as a JSON object
     getShows();
+  }
+
+  if ($_GET['function'] === 'getShowData') {
+    // Call the function and return the result as a JSON object
+    if($_GET['id']) {
+      getShowData($_GET['id']);
+    }
+    else {
+      getShowData(-1);
+    }
+    
   }
 }
 ?>

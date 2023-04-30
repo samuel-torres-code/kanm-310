@@ -17,19 +17,27 @@ function Shows() {
   });
 
   
-//   useEffect(() => {
-//     // Make a GET request to the PHP backend function
-//     fetch("http://localhost/kanm-310/react/php/getShows.php?function=getShows;id={}")
-//     .then(response => response.json())
-//     .then(data => setShowData(data));
-// }, []);
+  useEffect(() => {
+    // Make a GET request to the PHP backend function
+    fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
+    .then(response => response.json())
+    .then(data => setShowData(data));
+
+}, []);
+  const convertTimeText = (text: String) => {
+    let hour = parseInt(text.slice(10).split(":")[0]);
+    let meridiem = (hour >= 12) ? "PM" : "AM";
+    hour = (hour > 12) ? hour - 12 : hour;
+    hour = (hour == 0) ? 12 : hour;
+    return hour + meridiem;
+  };
 
   return (
     <div>
       <Row className='mx-5 my-5'>
         <Col xs={12} md={4} >
           <Image style={{ maxWidth: 'inherit' }} src={showData.show_pic}/> 
-          <p> {days[showData.day_of_week]}s @ {showData.start_time.split(":")[0]} </p>
+          <p> {days[showData.day_of_week]}s @ {convertTimeText(showData.start_time)} </p>
         </Col>
         <Col xs={11} md={6}>
           <p> {showData.show_name} </p>
