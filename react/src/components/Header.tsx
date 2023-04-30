@@ -10,23 +10,25 @@ import "./Header.css";
 import useAdmin from "../hooks/useAdmin";
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import LoginModal from "./LoginModal";
+import useShowAdminToggle from "../hooks/useShowAdminToggle";
 
 function Header() {
 
-
+  const [showAdminToggle, setShowAdminToggle] = useShowAdminToggle();
   const [isAdmin, setIsAdmin] = useAdmin();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [userID, setUserID] = useLocalStorageUserID();
 
   const handleLogin = (username: string, password: string) => {
-    console.log(username,password);
     fetch(
       `http://localhost/kanm-310/react/php/getUsers.php?function=getUserData&username=${username}&password=${password}`
     )
       .then((response) => response.json())
       .then((data) => {
         setUserID(data.user_id);
+        console.log(data);
+        setShowAdminToggle(data.is_admin === "1")
       });
   };
 
@@ -75,6 +77,7 @@ function Header() {
             )}
           </Nav>
           <Nav className="ml-auto mr-2">
+            {showAdminToggle &&
             <ToggleButton
               className="mb-2"
               id="toggle-check"
@@ -90,12 +93,13 @@ function Header() {
             >
               Admin
             </ToggleButton>
+}
             {!userID && <>
             <Button className="mb-2" onClick={() => setShowLoginModal(true)}>Login</Button>
             
             </>
   }
-  {userID && <><Button variant="secondary" className="mb-2" onClick={() => setUserID(undefined)}>Logout</Button></>}
+  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false);}}>Logout</Button></>}
   <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
