@@ -4,18 +4,22 @@ import { useParams } from 'react-router-dom';
 import type { ShowData, Comment } from './types.js';
 import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
+import Spinner from 'react-bootstrap/Spinner';
+
 
 function Shows() {
   const { id } = useParams<{id: string}>();
 
   const [showData, setShowData] = useState<ShowData>({
-    show_name: 'Show Name',
-    show_desc: 'Description',
-    show_pic: 'https://i.pinimg.com/originals/4d/f2/d6/4df2d6fb62cc3948933eb6609d1c6ce8.jpg',
+    show_name: '',
+    show_desc: '',
+    show_pic: '',
     start_time: '12:00:00',
     end_time: '13:00:00',
     day_of_week: 0,
   });
+
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
 
   const [comments, setComments] = useState<Comment[]>([]);
 
@@ -24,7 +28,10 @@ function Shows() {
     // Make a GET request to the PHP backend function
     fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
     .then(response => response.json())
-    .then(data => setShowData(data));
+    .then(data => {
+      setShowData(data);
+      setIsLoading(false);
+    });
 
 }, []);
 
@@ -43,10 +50,10 @@ function Shows() {
     .then(data => setComments(data));
 }, []);
 
-  console.log(comments);
 
   return (
     <div>
+      {!isLoading && 
       <Row className='mx-5 my-5'>
         <Col xs={12} md={4} >
           <Image style={{ maxWidth: 'inherit' }} src={showData.show_pic}/> 
@@ -62,7 +69,15 @@ function Shows() {
           </Button>
         </Col>
       </Row>
-
+}
+{isLoading && 
+    <Row className="justify-content-center my-5">
+      
+      <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>
+    </Row>
+}
       <Table striped bordered hover>
         <thead>
           <tr>

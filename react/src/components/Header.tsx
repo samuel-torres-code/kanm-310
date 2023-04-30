@@ -7,30 +7,21 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import Logo from "../assets/logo.png";
 import "./Header.css";
+import useAdmin from "../hooks/useAdmin";
+import LoginModal from "./LoginModal";
 
 function Header() {
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
-    const storedIsAdmin = localStorage.getItem("isAdmin");
-    return storedIsAdmin ? JSON.parse(storedIsAdmin) : false;
-  });
 
-  useEffect(() => {
-    if (isAdmin === undefined) {
-      localStorage.setItem("isAdmin", "false");
-    } else {
-      localStorage.setItem("isAdmin", isAdmin.toString());
-    }
-  }, [isAdmin]);
+
+  const [isAdmin, setIsAdmin] = useAdmin();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const [userID, setUserID] = useState<String>();
+
+  const handleLogin = (username: string, password: string) => {
+    console.log(username,password);
+  };
   
-  useEffect(() => {
-    const storedIsAdmin = localStorage.getItem("isAdmin");
-    if (storedIsAdmin !== null) {
-      setIsAdmin(storedIsAdmin === "true");
-    } else {
-      setIsAdmin(false);
-      localStorage.setItem("isAdmin", "false");
-    }
-  }, []);
 
   return (
     <div>
@@ -90,6 +81,12 @@ function Header() {
             >
               Admin
             </ToggleButton>
+            <button onClick={() => setShowLoginModal(true)}>Login</button>
+            <LoginModal
+              show={showLoginModal}
+              onHide={() => setShowLoginModal(false)}
+              onLogin={handleLogin}
+            />
           </Nav>
         </Navbar.Collapse>
       </Navbar>
