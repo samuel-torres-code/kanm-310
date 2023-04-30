@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 16, 2023 at 08:27 PM
+-- Generation Time: Apr 30, 2023 at 03:38 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -77,6 +77,7 @@ CREATE TABLE `shows` (
   `show_id` int(11) NOT NULL,
   `show_name` varchar(100) NOT NULL,
   `show_desc` varchar(255) NOT NULL,
+  `show_pic` text NOT NULL,
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL,
   `day_of_week` int(11) NOT NULL
@@ -86,8 +87,8 @@ CREATE TABLE `shows` (
 -- Dumping data for table `shows`
 --
 
-INSERT INTO `shows` (`show_id`, `show_name`, `show_desc`, `start_time`, `end_time`, `day_of_week`) VALUES
-(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy Fresh', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2);
+INSERT INTO `shows` (`show_id`, `show_name`, `show_desc`, `show_pic`, `start_time`, `end_time`, `day_of_week`) VALUES
+(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy Fresh', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/718smiley.svg/2048px-718smiley.svg.png', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2);
 
 -- --------------------------------------------------------
 
@@ -145,7 +146,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `first_name`, `last_name`, `is_admin`, `is_dj`) VALUES
-(1, 'raacecar246', 'password', 'torres.sam@tamu.edu', 'Sam', 'Torres', 1, 1);
+(1, 'raacecar246', 'password', 'torres.sam@tamu.edu', 'Sam', 'Torres', 1, 1),
+(2, 'dogenut', '$2y$10$T9ZW4jKZeRFWBU740iyeFOugbPjbY1Rq4vF4jSZ.S92Y97Zr.c2GW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
+(3, 'dogenut', '$2y$10$p.ZZXbMs5hfEVTwodKPMhO7y1HDEwHHlX4CTtyFMGJP.xX4np.BEW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
+(4, 'dogenut', '$2y$10$mH0c1hq9lIjKHGUT92ZA1Oo0VKdi3ongSnBLtX4zxNR6adZ.2P63u', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -218,7 +222,7 @@ ALTER TABLE `sets`
 -- AUTO_INCREMENT for table `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tracks`
@@ -230,7 +234,7 @@ ALTER TABLE `tracks`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
