@@ -18,15 +18,12 @@ function LoginModal({ show, onHide, onLogin }: LoginModalProps) {
     setAuthStatus("pending");
     try {
       // Perform authentication
-    //   const response = await fetch("/api/login", {
-    //     method: "POST",
-    //     body: JSON.stringify({ username, password }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
+      const response = await fetch(
+        `http://localhost/kanm-310/react/php/getUsers.php?function=getUserData&username=${username}&password=${password}`
+      );
+      
         
-      if (username==="Sam") {
+      if (response.ok) {
         // Authentication succeeded
         setAuthStatus("success");
         onLogin(username, password);

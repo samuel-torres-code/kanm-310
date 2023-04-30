@@ -43,6 +43,8 @@ function getUserData($user_username,$user_password) {
 
     echo json_encode($rows[0]);
   } else {
+    header("HTTP/1.0 404 Not Found");
+    http_response_code(404);
     echo json_encode(array('error' => 'Invalid username or password.'));
   }
 
@@ -65,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       getUserData($_GET['username'],$_GET['password']);
     }
     else {
+      http_response_code(404);
+      header("HTTP/1.0 404 Not Found");
       echo json_encode(array("error" => "No Username or Password Provided"));
     }
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Button } from "react-bootstrap";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { LinkContainer } from "react-router-bootstrap";
@@ -21,7 +21,13 @@ function Header() {
 
   const handleLogin = (username: string, password: string) => {
     console.log(username,password);
-    setUserID("1");
+    fetch(
+      `http://localhost/kanm-310/react/php/getUsers.php?function=getUserData&username=${username}&password=${password}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setUserID(data.user_id);
+      });
   };
 
   
@@ -59,7 +65,7 @@ function Header() {
                 <LinkContainer to="/users">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to={`/shows/${userID}`}>
+                <LinkContainer to={`/shows/1`}>
                   <Nav.Link>My Show</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/userschedule">
@@ -85,15 +91,16 @@ function Header() {
               Admin
             </ToggleButton>
             {!userID && <>
-            <button onClick={() => setShowLoginModal(true)}>Login</button>
-            <LoginModal
+            <Button className="mb-2" onClick={() => setShowLoginModal(true)}>Login</Button>
+            
+            </>
+  }
+  {userID && <><Button variant="secondary" className="mb-2" onClick={() => setUserID(undefined)}>Logout</Button></>}
+  <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
               onLogin={handleLogin}
             />
-            </>
-  }
-  {userID && <><button onClick={() => setShowLoginModal(true)}>Login</button></>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
