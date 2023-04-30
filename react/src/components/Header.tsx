@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import ToggleButton from "react-bootstrap/ToggleButton";
@@ -9,7 +9,28 @@ import Logo from "../assets/logo.png";
 import "./Header.css";
 
 function Header() {
-  const [isAdmin, setIsAdmin] = useState<Boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    const storedIsAdmin = localStorage.getItem("isAdmin");
+    return storedIsAdmin ? JSON.parse(storedIsAdmin) : false;
+  });
+
+  useEffect(() => {
+    if (isAdmin === undefined) {
+      localStorage.setItem("isAdmin", "false");
+    } else {
+      localStorage.setItem("isAdmin", isAdmin.toString());
+    }
+  }, [isAdmin]);
+  
+  useEffect(() => {
+    const storedIsAdmin = localStorage.getItem("isAdmin");
+    if (storedIsAdmin !== null) {
+      setIsAdmin(storedIsAdmin === "true");
+    } else {
+      setIsAdmin(false);
+      localStorage.setItem("isAdmin", "false");
+    }
+  }, []);
 
   return (
     <div>
@@ -61,7 +82,11 @@ function Header() {
               variant="outline-primary"
               checked={isAdmin}
               value="1"
-              onChange={(e) => setIsAdmin(e.currentTarget.checked)}
+              onChange={(e) => {
+                const value = e.currentTarget.checked;
+                setIsAdmin(value);
+                localStorage.setItem("isAdmin", value.toString());
+              }}
             >
               Admin
             </ToggleButton>
