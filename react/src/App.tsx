@@ -7,17 +7,20 @@ import './App.css'
 import ShowSchedule from './pages/ShowSchedule'
 import UserManager from './pages/UserManager'
 import Header from './components/Header'
+import UserHeader from './components/UserHeader'
+import Shows from './pages/Shows'
 
 
 function App() {
 
   return (
     <div className="App">
-      <Header/>
+      <UserHeader/>
       <Routes>
         <Route path="/" element={ <p>Im like hey whats up hello</p> } />
-        <Route path="schedule" element={ <ShowSchedule/> } />
+        <Route path="userschedule" element={ <ShowSchedule/> } />
         <Route path="users" element={ <UserManager/> } />
+        <Route path="shows/:id" element={ <Shows/> } />
       </Routes>
       
     </div>

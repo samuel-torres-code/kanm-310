@@ -4,13 +4,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import Logo from '../assets/logo.png'
 import './Header.css'
 
-function Header() {
-    
+
+function UserHeader() {
+
   return (
     <div>
       <Navbar expand="lg">
-        
-        
         <Navbar.Brand className="mx-3">
           <a href="/">
             <img
@@ -27,9 +26,12 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <LinkContainer to="/users">
-              <Nav.Link>User Manager</Nav.Link>
+              <Nav.Link>My Profile</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/schedule">
+            <LinkContainer to="/show">
+              <Nav.Link>My Show</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/userschedule">
               <Nav.Link>Show Schedule</Nav.Link>
             </LinkContainer>
           </Nav>
@@ -39,4 +41,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default UserHeader;
