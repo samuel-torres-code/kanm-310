@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 30, 2023 at 03:38 AM
+-- Generation Time: May 01, 2023 at 07:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -147,9 +147,42 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `first_name`, `last_name`, `is_admin`, `is_dj`) VALUES
 (1, 'raacecar246', 'password', 'torres.sam@tamu.edu', 'Sam', 'Torres', 1, 1),
-(2, 'dogenut', '$2y$10$T9ZW4jKZeRFWBU740iyeFOugbPjbY1Rq4vF4jSZ.S92Y97Zr.c2GW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
+(2, 'dogenut', 'password', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
 (3, 'dogenut', '$2y$10$p.ZZXbMs5hfEVTwodKPMhO7y1HDEwHHlX4CTtyFMGJP.xX4np.BEW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
 (4, 'dogenut', '$2y$10$mH0c1hq9lIjKHGUT92ZA1Oo0VKdi3ongSnBLtX4zxNR6adZ.2P63u', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `user_show`
+-- (See below for the actual view)
+--
+CREATE TABLE `user_show` (
+`user_id` int(11)
+,`username` varchar(100)
+,`password` varchar(255)
+,`email` varchar(100)
+,`first_name` varchar(100)
+,`last_name` varchar(100)
+,`is_admin` tinyint(1)
+,`is_dj` tinyint(1)
+,`show_id` int(11)
+,`show_name` varchar(100)
+,`show_desc` varchar(255)
+,`show_pic` text
+,`start_time` datetime
+,`end_time` datetime
+,`day_of_week` int(11)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `user_show`
+--
+DROP TABLE IF EXISTS `user_show`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_show`  AS SELECT `u`.`user_id` AS `user_id`, `u`.`username` AS `username`, `u`.`password` AS `password`, `u`.`email` AS `email`, `u`.`first_name` AS `first_name`, `u`.`last_name` AS `last_name`, `u`.`is_admin` AS `is_admin`, `u`.`is_dj` AS `is_dj`, `s`.`show_id` AS `show_id`, `s`.`show_name` AS `show_name`, `s`.`show_desc` AS `show_desc`, `s`.`show_pic` AS `show_pic`, `s`.`start_time` AS `start_time`, `s`.`end_time` AS `end_time`, `s`.`day_of_week` AS `day_of_week` FROM ((`users` `u` join `show_hosts` `sh` on(`sh`.`user_id` = `u`.`user_id`)) join `shows` `s` on(`s`.`show_id` = `sh`.`show_id`)) ;
 
 --
 -- Indexes for dumped tables
