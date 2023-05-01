@@ -9,6 +9,7 @@ import Logo from "../assets/logo.png";
 import "./Header.css";
 import useAdmin from "../hooks/useAdmin";
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
+import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import LoginModal from "./LoginModal";
 import useShowAdminToggle from "../hooks/useShowAdminToggle";
 
@@ -19,6 +20,7 @@ function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [userID, setUserID] = useLocalStorageUserID();
+  const [showID, setShowID] = useLocalStorageShowID();
 
   const handleLogin = (username: string, password: string) => {
     fetch(
@@ -27,7 +29,12 @@ function Header() {
       .then((response) => response.json())
       .then((data) => {
         setUserID(data.user_id);
-        console.log(data);
+        if(data.is_dj === "1") {
+          fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowDataFromUser&id=${data.user_id}`).then((res) => res.json()).then((data)=> {
+            console.log(data);
+            setShowID(data.show_id);
+          })
+        }
         setShowAdminToggle(data.is_admin === "1")
       });
   };
@@ -67,9 +74,11 @@ function Header() {
                 <LinkContainer to="/users">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to={`/shows/1`}>
+                {showID && 
+                <LinkContainer to={`/shows/${showID}`}>
                   <Nav.Link>My Show</Nav.Link>
                 </LinkContainer>
+                }
                 <LinkContainer to="/userschedule">
                   <Nav.Link>Show Schedule</Nav.Link>
                 </LinkContainer>
@@ -99,7 +108,7 @@ function Header() {
             
             </>
   }
-  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false);}}>Logout</Button></>}
+  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false); setShowID(undefined)}}>Logout</Button></>}
   <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
