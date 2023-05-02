@@ -1,7 +1,14 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, Form, Button } from "react-bootstrap";
+import { Table, Form, Button, Modal } from "react-bootstrap";
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import Icon from '@mui/material/Icon';
+
 
 type User = {
   user_id: number;
@@ -69,6 +76,43 @@ const createUser = (newUser: User) => {
     });
 }
 
+const deleteUser = (userId: number) => {
+  let data = JSON.stringify({ user_id: userId });
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost/kanm-310/react/php/deleteUser.php?function=deleteUser',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+      setUsers(users.filter(user => user.user_id !== userId));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+  const [userToDelete, setUserToDelete] = useState(0);
+
+  const handleDeleteUser = (user : User) => {
+    setUserToDelete(user.user_id);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteUser(userToDelete);
+    setUserToDelete(0);
+  };
+
+  const handleCancelDelete = () => {
+    setUserToDelete(0);
+  };
+
   useEffect(() => {
       // Make a GET request to the PHP backend function
       fetch('http://localhost/kanm-310/react/php/getUsers.php?function=getUsers')
@@ -129,16 +173,28 @@ const createUser = (newUser: User) => {
 
   return (
     <>
+      <Modal show={userToDelete !== 0} onHide={handleCancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete user {userToDelete}?
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={handleCancelDelete}>Cancel</button>
+          <button onClick={handleConfirmDelete}>Delete</button>
+        </Modal.Footer>
+      </Modal>
     <Table striped bordered hover>
       <thead>
         <tr>
           <th></th>
-          <th>user_id</th>
-          <th>username</th>
-          <th>password</th>
-          <th>email</th>
-          <th>first_name</th>
-          <th>last_name</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -146,22 +202,22 @@ const createUser = (newUser: User) => {
           <tr key={user.user_id}>
             <td>             
                 {editingUser === user.user_id ? (
-                <Button variant="success" onClick={handleSaveUser}>
-                  Save
-                </Button>
+                <IconButton onClick={handleSaveUser}>
+                  <SaveAltIcon/>
+                </IconButton>
               ) : (
-                <Button variant="primary" onClick={() => handleEditUser(user.user_id)}>
-                  Edit
-                </Button>
+                <IconButton className="edit" onClick={() => handleEditUser(user.user_id)}>
+                  <EditIcon/>
+                </IconButton>
               )}
               </td>
-            <td>{user.user_id}</td>
             <td>
             {editingUser === user.user_id ? (
                     <Form.Control
                     type="text"
                     value={user.username}
                     onChange={(e) => handleInputChange(e, user.user_id, "username")}
+                    required
                     />
                 ) : (
                     user.username
@@ -173,6 +229,7 @@ const createUser = (newUser: User) => {
                     type="text"
                     value={user.password}
                     onChange={(e) => handleInputChange(e, user.user_id, "password")}
+                    required
                     />
                 ) : (
                     user.password
@@ -184,6 +241,7 @@ const createUser = (newUser: User) => {
                     type="text"
                     value={user.email}
                     onChange={(e) => handleInputChange(e, user.user_id, "email")}
+                    required
                     />
                 ) : (
                     user.email
@@ -195,6 +253,7 @@ const createUser = (newUser: User) => {
                     type="text"
                     value={user.first_name}
                     onChange={(e) => handleInputChange(e, user.user_id, "first_name")}
+                    required
                     />
                 ) : (
                     user.first_name
@@ -206,26 +265,32 @@ const createUser = (newUser: User) => {
                     type="text"
                     value={user.last_name}
                     onChange={(e) => handleInputChange(e, user.user_id, "last_name")}
+                    required
                     />
                 ) : (
                     user.last_name
                 )}
+            </td>
+            <td>
+              <IconButton className="delete" onClick={() => handleDeleteUser(user)}>
+                <DeleteIcon/>
+              </IconButton>
             </td>
           </tr>
         ))}
         {addingUser && (
         <tr key="new">
           <td>
-            <Button variant="success" onClick={handleCreateUser}>
-              Create
-            </Button>
+          <IconButton className="create" onClick={handleCreateUser}>
+            <AddIcon/>
+          </IconButton>
           </td>
-          <td></td>
           <td>
             <Form.Control
               type="text"
               value={newUser.username}
               onChange={(e) => handleInputNewChange(e, "username")}
+              required
             />
           </td>
           <td>
@@ -233,6 +298,7 @@ const createUser = (newUser: User) => {
               type="text"
               value={newUser.password}
               onChange={(e) => handleInputNewChange(e, "password")}
+              required
             />
           </td>
           <td>
@@ -240,6 +306,7 @@ const createUser = (newUser: User) => {
               type="text"
               value={newUser.email}
               onChange={(e) => handleInputNewChange(e, "email")}
+              required
             />
           </td>
           <td>
@@ -247,6 +314,7 @@ const createUser = (newUser: User) => {
               type="text"
               value={newUser.first_name}
               onChange={(e) => handleInputNewChange(e, "first_name")}
+              required
             />
           </td>
           <td>
@@ -254,6 +322,7 @@ const createUser = (newUser: User) => {
               type="text"
               value={newUser.last_name}
               onChange={(e) => handleInputNewChange(e, "last_name")}
+              required
             />
           </td>
         </tr>
