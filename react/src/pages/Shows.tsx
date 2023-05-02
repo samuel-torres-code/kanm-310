@@ -1,4 +1,6 @@
+
 import { Button, Image, Row, Col, Form } from 'react-bootstrap';
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import type { ShowData, Comment } from './types.js';
@@ -7,7 +9,6 @@ import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
-import axios from "axios";
 
 
 function Shows() {
@@ -141,7 +142,29 @@ const handlePicChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 };
 
 const handleShowSubmit = () => {
+  setIsLoading(true);
   setShowData({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});
+  let data = JSON.stringify({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});
+      
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost/kanm-310/react/php/updateShow.php?function=updateShow',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+      
+      axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   setIsEditingShow(false);
 };
 
@@ -195,6 +218,7 @@ const handleShowSubmit = () => {
               size="lg"
               value={newName}
               onChange={handleNameChange}
+              maxLength={100}
             />
             </Form.Group>
             
@@ -206,6 +230,7 @@ const handleShowSubmit = () => {
               as="textarea"
               value={newDesc}
               onChange={handleDescChange}
+              maxLength={255}
             />
             </Form.Group>
           </Col>
