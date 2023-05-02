@@ -6,6 +6,7 @@ import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
+import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import axios from "axios";
 
 
@@ -22,6 +23,13 @@ function Shows() {
   });
 
   const [userID, setUserID] = useLocalStorageUserID();
+  const [isEditingShow,setIsEditingShow] = useState<boolean>(false);
+  const [newName, setNewName] = useState<string>(showData.show_name);
+  const [newDesc, setNewDesc] = useState<string>(showData.show_desc);
+  const [newPic, setNewPic] = useState<string>(showData.show_pic);
+
+  const [showID, setShowID] = useLocalStorageShowID();
+  
 
   const [isLoading, setIsLoading] = useState<Boolean>(true);
 
@@ -45,6 +53,7 @@ function Shows() {
       show_id: Number(id) || 0,
       comment_text: comment,
       time_stamp: "",
+      username: "",
     }
 
     createComment(newComment);
@@ -53,6 +62,7 @@ function Shows() {
 
   const createComment = (newComment: Comment) => {
     let data = JSON.stringify(newComment);
+    console.log(data)
     
     let config = {
       method: 'post',
@@ -80,6 +90,9 @@ function Shows() {
     .then(response => response.json())
     .then(data => {
       setShowData(data);
+      setNewName(data.show_name);
+      setNewDesc(data.show_desc);
+      setNewPic(data.show_pic);
       if(data !== null) {
         setIsLoading(false);
       }
@@ -115,25 +128,100 @@ useEffect(() => {
     .then(data => setComments(data));
 }, []);
 
+const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setNewName(e.target.value);
+};
+
+const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setNewDesc(e.target.value);
+};
+
+const handlePicChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setNewPic(e.target.value);
+};
+
+const handleShowSubmit = () => {
+  setShowData({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});
+  setIsEditingShow(false);
+};
+
 
   return (
 
     <div>
       {!isLoading && 
       <Row className='mx-5 my-5'>
-        <Col xs={12} md={4} >
+        
+        {showID === id && !isEditingShow &&
+        
+          <>
+          <Col xs={12} md={4} >
           <Image style={{ maxWidth: 'inherit' }} src={showData.show_pic}/> 
           <p> {days[showData.day_of_week]}s @ {convertTimeText(showData.start_time)} </p>
-        </Col>
-        <Col xs={11} md={6}>
-          <p> {showData.show_name} </p>
-          <p> {showData.show_desc} </p>
-        </Col>
-        <Col xs={1} md={1}>
-        <Button variant="primary" onClick={() => console.log('hai :0)')}>
-            Edit
-          </Button>
-        </Col>
+          </Col>
+          <Col xs={11} md={6}>
+            <p> {showData.show_name} </p>
+            <p> {showData.show_desc} </p>
+          </Col>
+          <Col xs={1} md={1}>
+          
+          <Button variant="primary" onClick={() => setIsEditingShow(true)}>
+              Edit
+            </Button>
+          </Col>
+          </>
+}
+          {showID === id && isEditingShow &&
+          <>
+          <Col xs={12} md={4} >
+          <Image style={{ maxWidth: 'inherit' }} src={newPic}/> 
+          <Form.Group className="mb-3" >
+              <Form.Label>Show Picture Link</Form.Label>
+              <Form.Control
+              type="text"
+              size="lg"
+              value={newPic}
+              onChange={handlePicChange}
+            />
+            </Form.Group>
+          <p> {days[showData.day_of_week]}s @ {convertTimeText(showData.start_time)} </p>
+          </Col>
+          <Col xs={11} md={6}>
+            
+            <Form.Group className="mb-3" >
+              <Form.Label>Show Name</Form.Label>
+              <Form.Control
+              type="text"
+              size="lg"
+              value={newName}
+              onChange={handleNameChange}
+            />
+            </Form.Group>
+            
+            
+            
+            <Form.Group className="mb-3" >
+              <Form.Label>Show Description</Form.Label>
+              <Form.Control
+              as="textarea"
+              value={newDesc}
+              onChange={handleDescChange}
+            />
+            </Form.Group>
+          </Col>
+          <Col xs={1} md={1}>
+          
+          
+            <Button variant="primary" onClick={() => handleShowSubmit()}>
+              Save
+            </Button>
+            <Button variant="secondary" onClick={() => setIsEditingShow(false)}>
+              Cancel
+            </Button>
+          </Col>
+          </>
+          }
+
       </Row>
 }
 {isLoading && 
