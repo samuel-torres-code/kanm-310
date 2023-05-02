@@ -166,9 +166,8 @@ useEffect(() => {
         <tbody>
           {comments
           .sort((obj1, obj2) => {
-              if (obj1.comment_id > obj2.comment_id) return -1;
-              if (obj2.comment_id > obj1.comment_id) return 1;
-              return 0;
+              if (obj1.time_stamp > obj2.time_stamp) return -1;
+              return 1
             })
           .map((comment) => (
           <tr>
