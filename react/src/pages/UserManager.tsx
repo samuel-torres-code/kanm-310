@@ -173,6 +173,7 @@ const deleteUser = (userId: number) => {
 
   return (
     <>
+    <h2>Manage Users</h2>
       <Modal show={userToDelete !== 0} onHide={handleCancelDelete}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
@@ -185,7 +186,7 @@ const deleteUser = (userId: number) => {
           <button onClick={handleConfirmDelete}>Delete</button>
         </Modal.Footer>
       </Modal>
-    <Table striped bordered hover>
+    <Table responsive striped bordered hover style={{borderColor: "black", border: "2px"}}>
       <thead>
         <tr>
           <th></th>
@@ -277,9 +278,11 @@ const deleteUser = (userId: number) => {
               </IconButton>
             </td>
           </tr>
+          
         ))}
         {addingUser && (
         <tr key="new">
+          {/* <Form onSubmit={handleCreateUser}> */}
           <td>
           <IconButton className="create" onClick={handleCreateUser}>
             <AddIcon/>
@@ -324,15 +327,14 @@ const deleteUser = (userId: number) => {
               onChange={(e) => handleInputNewChange(e, "last_name")}
               required
             />
-          </td>
+          </td>   
         </tr>
       )}
-
       </tbody>
     </Table>
-    <Button variant="primary" onClick={handleAddUser}>
+    <button onClick={handleAddUser}>
       New User
-    </Button>
+    </button>
     </>
   );
 };

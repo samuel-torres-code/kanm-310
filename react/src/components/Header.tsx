@@ -42,7 +42,7 @@ function Header() {
   
 
   return (
-    <div>
+    <div style={{marginRight: "20px", marginTop: "10px"}}>
       <Navbar expand="lg">
         <Navbar.Brand className="mx-3">
           <a href="/">

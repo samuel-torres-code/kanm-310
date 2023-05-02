@@ -16,6 +16,7 @@ function App() {
   return (
     <div className="App">
       <Header/>
+      <div style={{margin: "20px"}}>
       <Routes>
         <Route path="/" element={ <p>Im like hey whats up hello</p> } />
         <Route path="userschedule" element={ <ShowSchedule/> } />
@@ -23,7 +24,7 @@ function App() {
         <Route path="users" element={ <UserManager/> } />
         <Route path="shows/:id" element={ <Shows/> } />
       </Routes>
-      
+      </div>
     </div>
   )
 }
