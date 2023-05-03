@@ -16,7 +16,7 @@ To view PHPMyAdmin, go to `http://localhost/phpmyadmin/`
 
 # Running the GUI
 
-Run the command `npm run dev` in the react directory of the project. This will start the react frontend. 
+Run the command `npm i` then `npm run dev` in the react directory of the project. This will start the react frontend. 
 
 # Database Updating
 
