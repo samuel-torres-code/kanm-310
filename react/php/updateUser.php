@@ -6,17 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
 function updateUser($user_id, $username, $password, $email, $first_name, $last_name) {
-  // Create a connection to the database
-  $servername = "localhost";
-  $uname = "root";
-  $pword = "";
-  $dbname = "kanm";
-  // Create connection
-  $conn = new mysqli($servername, $uname, $pword, $dbname);
-  // Check connection
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }
+  include_once './dbconfig.php';
 
   // Update the row in the 'user' table
   $sql = "UPDATE users SET username='{$username}', password='{$password}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}' WHERE user_id={$user_id}";

@@ -5,20 +5,10 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-// This is a simple example of a PHP backend function that returns the current date and time
 function getUsers() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "kanm";
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    include_once './dbconfig.php';
 
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM members";
     $result = $conn->query($sql);
     $rows = array();
 
@@ -29,10 +19,11 @@ function getUsers() {
 
     $conn->close();
 }
+
 function getUserData($user_username,$user_password) {
   include_once './dbconfig.php';
   
-  $sql = "SELECT * FROM users where username = '{$user_username}' and password = '{$user_password}';";
+  $sql = "SELECT * FROM members where username = '{$user_username}' and password = '{$user_password}';";
   $result = $conn->query($sql);
   if ($result->num_rows > 0) {
     $rows = array();

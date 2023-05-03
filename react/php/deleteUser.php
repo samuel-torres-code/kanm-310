@@ -7,16 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 function deleteUser($user_id) {
   
-    $servername = "localhost";
-    $uname = "root";
-    $pword = "";
-    $dbname = "kanm";
-    // Create connection
-    $conn = new mysqli($servername, $uname, $pword, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+  include_once './dbconfig.php';
   
   //SQL query
   $sql = "DELETE FROM users WHERE user_id = $user_id";

@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import Icon from '@mui/material/Icon';
+import useAdmin from "../hooks/useAdmin";
 
 
 type User = {
@@ -17,11 +17,13 @@ type User = {
   email: string;
   first_name: string;
   last_name: string;
+  show_name?: string;
 }
 
 
 function UserManager(){
 
+  const [isAdmin, setIsAdmin] = useAdmin();
   
   const initialNewUser: User = {
     user_id: -1,
@@ -111,6 +113,7 @@ const deleteUser = (userId: number) => {
 
   const handleCancelDelete = () => {
     setUserToDelete(0);
+    setAddingUser(false);
   };
 
   useEffect(() => {
@@ -173,6 +176,8 @@ const deleteUser = (userId: number) => {
 
   return (
     <>
+    {isAdmin && (
+    <>
     <h2>Manage Users</h2>
       <Modal show={userToDelete !== 0} onHide={handleCancelDelete}>
         <Modal.Header closeButton>
@@ -195,6 +200,7 @@ const deleteUser = (userId: number) => {
           <th>Email</th>
           <th>First Name</th>
           <th>Last Name</th>
+          <th>Show Name</th>
           <th></th>
         </tr>
       </thead>
@@ -273,6 +279,9 @@ const deleteUser = (userId: number) => {
                 )}
             </td>
             <td>
+              {user.show_name}
+            </td>
+            <td>
               <IconButton className="delete" onClick={() => handleDeleteUser(user)}>
                 <DeleteIcon/>
               </IconButton>
@@ -282,7 +291,6 @@ const deleteUser = (userId: number) => {
         ))}
         {addingUser && (
         <tr key="new">
-          {/* <Form onSubmit={handleCreateUser}> */}
           <td>
           <IconButton className="create" onClick={handleCreateUser}>
             <AddIcon/>
@@ -328,6 +336,12 @@ const deleteUser = (userId: number) => {
               required
             />
           </td>   
+          <td></td>
+          <td>
+          <IconButton className="delete" type="button" onClick={() => handleCancelDelete}>
+            <DeleteIcon/>
+          </IconButton>
+          </td>
         </tr>
       )}
       </tbody>
@@ -335,6 +349,13 @@ const deleteUser = (userId: number) => {
     <button onClick={handleAddUser}>
       New User
     </button>
+    </>
+    )}
+    {!isAdmin && (
+      <>
+      <div> Sorry, you don't have permission to access this page. </div>
+      </>
+    )}
     </>
   );
 };
