@@ -3,7 +3,7 @@ import { Button, Image, Row, Col, Form } from 'react-bootstrap';
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ShowData, Comment } from './types.js';
+import type { ShowData, Comment, User, UserShowData } from './types.js';
 import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
@@ -22,6 +22,8 @@ function Shows() {
     end_time: '13:00:00',
     day_of_week: 0,
   });
+
+  const [ DJs, setDJs] = useState<UserShowData[]>([]);
 
   const [userID, setUserID] = useLocalStorageUserID();
   const [isEditingShow,setIsEditingShow] = useState<boolean>(false);
@@ -88,14 +90,25 @@ function Shows() {
   
   useEffect(() => {
     // Make a GET request to the PHP backend function
-    fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
+    fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getExtendedShowData&id=${id}`)
     .then(response => response.json())
     .then(data => {
-      setShowData(data);
-      setNewName(data.show_name);
-      setNewDesc(data.show_desc);
-      setNewPic(data.show_pic);
-      if(data !== null) {
+      if(data.length >= 1) {
+        setShowData({show_name: data[0].show_name,
+        show_desc: data[0].show_desc,
+        show_pic: data[0].show_pic,
+        start_time: data[0].start_time,
+        end_time: data[0].end_time,
+        day_of_week: data[0].day_of_week});
+        setDJs(data);
+        console.log(data);
+        setNewName(data[0].show_name);
+        setNewDesc(data[0].show_desc);
+        setNewPic(data[0].show_pic);
+        setIsLoading(false);
+      }
+      
+      else{
         setIsLoading(false);
       }
     });
@@ -186,6 +199,15 @@ const handleShowSubmit = () => {
           <Col xs={11} md={6}>
             <p> {showData.show_name} </p>
             <p> {showData.show_desc} </p>
+            <p> DJs: {DJs.map((user,i) => {
+              if(i == DJs.length-1) {
+                return user.username
+              }
+              else {
+                return user.username + " and "
+              }
+              
+            })} </p>
           </Col>
           <Col xs={1} md={1}>
           {showID === id &&
