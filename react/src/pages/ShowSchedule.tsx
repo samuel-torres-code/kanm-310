@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
 import internal from 'stream';
 import { ShowData } from './types';
 
@@ -46,7 +47,7 @@ function ShowSchedule() {
                         <td>{days[show.day_of_week]}</td>
                         <td>{show.start_time.slice(10)}</td>
                         <td>{show.end_time.slice(10)}</td>
-                        <td>{show.show_name}</td>
+                        <td><Link to={`/shows/${show.show_id}`} >{show.show_name}</Link></td>
                         <td>{show.show_desc}</td>
                         <td>{show.show_pic}</td>
                     </tr>

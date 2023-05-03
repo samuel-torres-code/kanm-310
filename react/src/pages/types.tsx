@@ -1,6 +1,7 @@
 
 
 export type ShowData = {
+    show_id?: string;
     show_name: string;
     show_desc: string;
     show_pic: string;

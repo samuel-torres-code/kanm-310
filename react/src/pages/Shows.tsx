@@ -9,6 +9,7 @@ import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
+import useAdmin from '../hooks/useAdmin.js';
 
 
 function Shows() {
@@ -32,7 +33,7 @@ function Shows() {
   const [newPic, setNewPic] = useState<string>(showData.show_pic);
 
   const [showID, setShowID] = useLocalStorageShowID();
-  
+  const [isAdmin, setIsAdmin] = useAdmin();
 
   const [isLoading, setIsLoading] = useState<Boolean>(true);
 
@@ -94,7 +95,7 @@ function Shows() {
     .then(response => response.json())
     .then(data => {
       if(data.length >= 1) {
-        setShowData({show_name: data[0].show_name,
+        setShowData({show_id: id,show_name: data[0].show_name,
         show_desc: data[0].show_desc,
         show_pic: data[0].show_pic,
         start_time: data[0].start_time,
@@ -210,7 +211,7 @@ const handleShowSubmit = () => {
             })} </p>
           </Col>
           <Col xs={1} md={1}>
-          {showID === id &&
+          {showID === id || isAdmin &&
           <Button variant="primary" onClick={() => setIsEditingShow(true)}>
               Edit
             </Button>
@@ -218,7 +219,7 @@ const handleShowSubmit = () => {
           </Col>
           </>
 }
-          {showID === id && isEditingShow &&
+          {isEditingShow &&
           <>
           <Col xs={12} md={4} >
           <Image style={{ maxWidth: 'inherit' }} src={newPic}/> 

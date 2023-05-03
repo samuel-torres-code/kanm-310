@@ -25,7 +25,7 @@ $day_of_week) {
 
   // Update the row in the 'user' table
   $sql = "UPDATE shows SET show_name='{$show_name}', show_desc='{$show_desc}', show_pic='{$show_pic}', start_time='{$start_time}', end_time='{$end_time}', day_of_week ={$day_of_week} WHERE show_id={$show_id}";
-
+  // echo $sql; 
 
 
 
