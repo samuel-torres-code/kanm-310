@@ -5,11 +5,11 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-function updateUser($user_id, $username, $password, $email, $first_name, $last_name) {
+function updateUser($user_id, $uname, $pword, $email, $first_name, $last_name) {
   include_once './dbconfig.php';
 
   // Update the row in the 'user' table
-  $sql = "UPDATE users SET username='{$username}', password='{$password}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}' WHERE user_id={$user_id}";
+  $sql = "UPDATE users SET username='{$uname}', password='{$pword}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}' WHERE user_id={$user_id}";
 
   echo json_encode($sql);
   $stmt = $conn->prepare($sql);

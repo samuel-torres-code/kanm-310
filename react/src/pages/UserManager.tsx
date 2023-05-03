@@ -8,17 +8,7 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import useAdmin from "../hooks/useAdmin";
-
-
-type User = {
-  user_id: number;
-  username: string;
-  password: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  show_name?: string;
-}
+import { User } from "./types";
 
 
 function UserManager(){

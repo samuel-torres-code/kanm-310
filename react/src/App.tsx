@@ -9,6 +9,7 @@ import UserManager from './pages/UserManager'
 import Header from './components/Header'
 import UserHeader from './components/UserHeader'
 import Shows from './pages/Shows'
+import UserProfile from './pages/UserProfile'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="userschedule" element={ <ShowSchedule/> } />
         <Route path="schedule" element={ <ShowSchedule/> } />
         <Route path="users" element={ <UserManager/> } />
+        <Route path="profile" element={ <UserProfile/> } />
         <Route path="shows/:id" element={ <Shows/> } />
       </Routes>
       </div>
