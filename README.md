@@ -14,6 +14,10 @@ To make this webpage render on `http://localhost/kanm-310/` you need to clone th
 To view PHPMyAdmin, go to `http://localhost/phpmyadmin/`
 **Make sure the MySQL Database is running in XAMPP before you do this.**
 
+# Running the GUI
+
+Run the command `npm i` then `npm run dev` in the react directory of the project. This will start the react frontend. 
+
 # Database Updating
 
 So I'm too lazy to handle migrations, so we are just gonna go the old fashioned way to make sure our databases are synchronized for development.

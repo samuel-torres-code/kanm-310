@@ -12,7 +12,9 @@ export const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fr
 
 export type Comment = {
     comment_id: number,
-    show_id: number,
+    comment_text: string,
     time_stamp: string,
-    comment_text: string
+    show_id: number,
+    user_id: number,
+    username: string
 }

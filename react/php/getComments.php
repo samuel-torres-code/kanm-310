@@ -17,7 +17,7 @@ function getComments($input) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT * FROM comments WHERE show_id = $input";
+    $sql = "SELECT * FROM user_comments WHERE show_id = $input";
     $result = $conn->query($sql);
     $rows = array();
 
