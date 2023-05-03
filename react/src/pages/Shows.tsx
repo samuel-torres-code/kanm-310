@@ -58,7 +58,7 @@ function Shows() {
     }
 
     createComment(newComment);
-    window.location.reload();
+
   };
 
   const createComment = (newComment: Comment) => {
@@ -78,9 +78,10 @@ function Shows() {
     axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
+      window.location.reload();
     })
     .catch((error) => {
-      console.log(error);
+      console.log(JSON.stringify(error));
     });
   }
 
@@ -100,19 +101,19 @@ function Shows() {
     });
 
 }, []);
-useEffect(() => {
-  setIsLoading(true);
-  // Make a GET request to the PHP backend function
-  fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
-  .then(response => response.json())
-  .then(data => {
-    setShowData(data);
-    if(data !== null) {
-      setIsLoading(false);
-    }
-  });
+// useEffect(() => {
+//   setIsLoading(true);
+//   // Make a GET request to the PHP backend function
+//   fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowData&id=${id}`)
+//   .then(response => response.json())
+//   .then(data => {
+//     setShowData(data);
+//     if(data !== null) {
+//       setIsLoading(false);
+//     }
+//   });
 
-}, [id]);
+// }, [id]);
 
   const convertTimeText = (text: String) => {
     let hour = parseInt(text.slice(10).split(":")[0]);
@@ -175,7 +176,7 @@ const handleShowSubmit = () => {
       {!isLoading && 
       <Row className='mx-5 my-5'>
         
-        {showID === id && !isEditingShow &&
+        {!isEditingShow &&
         
           <>
           <Col xs={12} md={4} >
@@ -187,10 +188,11 @@ const handleShowSubmit = () => {
             <p> {showData.show_desc} </p>
           </Col>
           <Col xs={1} md={1}>
-          
+          {showID === id &&
           <Button variant="primary" onClick={() => setIsEditingShow(true)}>
               Edit
             </Button>
+}
           </Col>
           </>
 }
@@ -283,7 +285,7 @@ const handleShowSubmit = () => {
               return 1
             })
           .map((comment) => (
-          <tr>
+          <tr key ={comment.time_stamp}>
               <td>{comment.username}</td>
               <td>{comment.time_stamp}</td>
               <td>{comment.comment_text}</td>
