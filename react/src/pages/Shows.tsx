@@ -211,7 +211,7 @@ const handleShowSubmit = () => {
             })} </p>
           </Col>
           <Col xs={1} md={1}>
-          {showID === id || isAdmin &&
+          {(showID === id || isAdmin) &&
           <Button variant="primary" onClick={() => setIsEditingShow(true)}>
               Edit
             </Button>

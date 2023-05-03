@@ -69,12 +69,18 @@ function Header() {
           <Nav className="mx-auto">
             {isAdmin && (
               <>
+
                 <LinkContainer to="/users">
                   <Nav.Link>User Manager</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/profile">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
+                {showID && 
+                <LinkContainer to={`/shows/${showID}`}>
+                  <Nav.Link>My Show</Nav.Link>
+                </LinkContainer>
+                }
                 <LinkContainer to="/schedule">
                   <Nav.Link>Show Schedule</Nav.Link>
                 </LinkContainer>
@@ -109,6 +115,7 @@ function Header() {
                 const value = e.currentTarget.checked;
                 setIsAdmin(value);
                 localStorage.setItem("isAdmin", value.toString());
+                window.location.reload();
               }}
             >
               Admin
