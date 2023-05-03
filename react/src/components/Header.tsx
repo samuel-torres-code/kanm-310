@@ -42,7 +42,7 @@ function Header() {
   
 
   return (
-    <div>
+    <div style={{marginRight: "20px", marginTop: "10px"}}>
       <Navbar expand="lg">
         <Navbar.Brand className="mx-3">
           <a href="/">
@@ -64,6 +64,9 @@ function Header() {
                 <LinkContainer to="/users">
                   <Nav.Link>User Manager</Nav.Link>
                 </LinkContainer>
+                <LinkContainer to="/profile">
+                  <Nav.Link>My Profile</Nav.Link>
+                </LinkContainer>
                 <LinkContainer to="/schedule">
                   <Nav.Link>Show Schedule</Nav.Link>
                 </LinkContainer>
@@ -71,7 +74,7 @@ function Header() {
             )}
             {!isAdmin && (
               <>
-                <LinkContainer to="/users">
+                <LinkContainer to="/profile">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
                 {showID && 

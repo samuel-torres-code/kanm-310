@@ -18,3 +18,13 @@ export type Comment = {
     user_id: number,
     username: string
 }
+
+export type User = {
+    user_id: number;
+    username: string;
+    password: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    show_name?: string;
+  }

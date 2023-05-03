@@ -7,21 +7,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import Icon from '@mui/material/Icon';
-
-
-type User = {
-  user_id: number;
-  username: string;
-  password: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
+import useAdmin from "../hooks/useAdmin";
+import { User } from "./types";
 
 
 function UserManager(){
 
+  const [isAdmin, setIsAdmin] = useAdmin();
   
   const initialNewUser: User = {
     user_id: -1,
@@ -111,6 +103,7 @@ const deleteUser = (userId: number) => {
 
   const handleCancelDelete = () => {
     setUserToDelete(0);
+    setAddingUser(false);
   };
 
   useEffect(() => {
@@ -173,6 +166,9 @@ const deleteUser = (userId: number) => {
 
   return (
     <>
+    {isAdmin && (
+    <>
+    <h2>Manage Users</h2>
       <Modal show={userToDelete !== 0} onHide={handleCancelDelete}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
@@ -185,7 +181,7 @@ const deleteUser = (userId: number) => {
           <button onClick={handleConfirmDelete}>Delete</button>
         </Modal.Footer>
       </Modal>
-    <Table striped bordered hover>
+    <Table responsive striped bordered hover style={{borderColor: "black", border: "2px"}}>
       <thead>
         <tr>
           <th></th>
@@ -194,6 +190,7 @@ const deleteUser = (userId: number) => {
           <th>Email</th>
           <th>First Name</th>
           <th>Last Name</th>
+          <th>Show Name</th>
           <th></th>
         </tr>
       </thead>
@@ -272,11 +269,15 @@ const deleteUser = (userId: number) => {
                 )}
             </td>
             <td>
+              {user.show_name}
+            </td>
+            <td>
               <IconButton className="delete" onClick={() => handleDeleteUser(user)}>
                 <DeleteIcon/>
               </IconButton>
             </td>
           </tr>
+          
         ))}
         {addingUser && (
         <tr key="new">
@@ -324,15 +325,27 @@ const deleteUser = (userId: number) => {
               onChange={(e) => handleInputNewChange(e, "last_name")}
               required
             />
+          </td>   
+          <td></td>
+          <td>
+          <IconButton className="delete" type="button" onClick={() => handleCancelDelete}>
+            <DeleteIcon/>
+          </IconButton>
           </td>
         </tr>
       )}
-
       </tbody>
     </Table>
-    <Button variant="primary" onClick={handleAddUser}>
+    <button onClick={handleAddUser}>
       New User
-    </Button>
+    </button>
+    </>
+    )}
+    {!isAdmin && (
+      <>
+      <div> Sorry, you don't have permission to access this page. </div>
+      </>
+    )}
     </>
   );
 };

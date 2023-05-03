@@ -6,17 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
 function createUser($username, $password, $email, $first_name, $last_name) {
-  // Create a connection to the database
-  $servername = "localhost";
-  $uname = "root";
-  $pword = "";
-  $dbname = "kanm";
-  // Create connection
-  $conn = new mysqli($servername, $uname, $pword, $dbname);
-  // Check connection
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }
+    include_once './dbconfig.php';
 
     // sanitize
     $username=htmlspecialchars(strip_tags($username));
@@ -29,7 +19,7 @@ function createUser($username, $password, $email, $first_name, $last_name) {
 
     echo json_encode($query);
         
-    // prepare the query
+    // prepare query
     $stmt = $conn->prepare($query);
 
     if($stmt->execute()){
