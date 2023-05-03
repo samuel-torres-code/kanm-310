@@ -44,6 +44,23 @@ function getShowData($id) {
     $conn->close();
     
 }
+
+function getExtendedShowData($id) {
+  include_once './dbconfig.php';
+  
+  $sql = "SELECT * FROM user_show where show_id = {$id}";
+  //echo json_encode($sql);
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows);
+
+    $conn->close();
+    
+}
 function getShowDataFromUser($u_id) {
   include_once './dbconfig.php';
   
@@ -75,6 +92,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     else {
       getShowData(-1);
+    }
+    
+  }
+  if ($_GET['function'] === 'getExtendedShowData') {
+    // Call the function and return the result as a JSON object
+    if($_GET['id']) {
+      getExtendedShowData($_GET['id']);
+    }
+    else {
+      getExtendedShowData(-1);
     }
     
   }

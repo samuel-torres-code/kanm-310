@@ -1,6 +1,7 @@
 
 
 export type ShowData = {
+    show_id?: string;
     show_name: string;
     show_desc: string;
     show_pic: string;
@@ -28,3 +29,6 @@ export type User = {
     last_name: string;
     show_name?: string;
   }
+  
+
+  export type UserShowData = User&ShowData;

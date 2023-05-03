@@ -29,13 +29,21 @@ function Header() {
       .then((response) => response.json())
       .then((data) => {
         setUserID(data.user_id);
+        setShowAdminToggle(data.is_admin === "1");
         if(data.is_dj === "1") {
           fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowDataFromUser&id=${data.user_id}`).then((res) => res.json()).then((data)=> {
             console.log(data);
             setShowID(data.show_id);
+            window.location.reload();
           })
         }
-        setShowAdminToggle(data.is_admin === "1")
+        else {
+          setShowID(undefined);
+          window.location.reload();
+        }
+        
+        
+
       });
   };
 
@@ -111,7 +119,7 @@ function Header() {
             
             </>
   }
-  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false); setShowID(undefined)}}>Logout</Button></>}
+  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false); setShowID(undefined);window.location.reload();}}>Logout</Button></>}
   <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
