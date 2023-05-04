@@ -116,6 +116,7 @@ function Shows() {
       acc[set_id] = [];
     }
     acc[set_id].push(curr);
+    console.log("test", acc, curr)
     return acc;
   }, {}) );
   setIsLoading(false);});
@@ -206,6 +207,27 @@ const handleTest = () => {
   console.log("test")
 }
 
+const handlePlayDelete = (set_id : string, track_id : string) => {
+  let data = JSON.stringify({set_id: set_id, track_id: track_id});
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'http://localhost/kanm-310/react/php/deletePlay.php?function=deletePlay',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
   return (
 
@@ -272,7 +294,7 @@ const handleTest = () => {
                       Edit
                     </Button>
                     {' '}
-                    <Button variant="secondary" onClick={() => handleTest()}>
+                    <Button variant="secondary" onClick={() => handlePlayDelete(setId, track.track_id)}>
                       Delete
                     </Button>
                   </div>
