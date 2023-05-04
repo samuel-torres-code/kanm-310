@@ -68,33 +68,29 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
             {isAdmin && (
-              <>
                 <LinkContainer to="/users">
                   <Nav.Link>User Manager</Nav.Link>
                 </LinkContainer>
+                )}
+                {showID && 
                 <LinkContainer to="/profile">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/schedule">
-                  <Nav.Link>Show Schedule</Nav.Link>
-                </LinkContainer>
-              </>
-            )}
-            {!isAdmin && (
-              <>
-                <LinkContainer to="/profile">
-                  <Nav.Link>My Profile</Nav.Link>
-                </LinkContainer>
+}
                 {showID && 
                 <LinkContainer to={`/shows/${showID}`}>
                   <Nav.Link>My Show</Nav.Link>
                 </LinkContainer>
                 }
-                <LinkContainer to="/userschedule">
+                <LinkContainer to="/schedule">
                   <Nav.Link>Show Schedule</Nav.Link>
                 </LinkContainer>
-              </>
-            )}
+              
+            
+            
+                
+                
+              
           </Nav>
           <Nav className="ml-auto mr-2">
             {showAdminToggle &&

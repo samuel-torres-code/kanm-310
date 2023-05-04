@@ -32,3 +32,25 @@ export type User = {
   
 
   export type UserShowData = User&ShowData;
+
+  export type SongPlay = {
+    set_id: string;
+    track_id: string;
+    track_name: string;
+    track_runtime: string;
+    track_artist: string;
+    track_album: string;
+    category: string;
+    mandatory: string;
+    time_stamp: string;
+    show_id: string;
+    show_name: string;
+    set_date: string;
+  };
+  export type ShowSets = {
+    
+        [set_id: string]: SongPlay[];
+      
+      
+  };
+  
