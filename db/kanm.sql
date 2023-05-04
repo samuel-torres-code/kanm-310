@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 03, 2023 at 09:11 PM
+-- Generation Time: May 04, 2023 at 05:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -61,7 +61,10 @@ INSERT INTO `comments` (`comment_id`, `user_id`, `show_id`, `time_stamp`, `comme
 (19, 1, 2, '2023-05-03 16:01:45', 'swaos'),
 (20, 2, 2, '2023-05-03 16:42:54', 'Sam'),
 (21, 5, 4, '2023-05-03 17:11:57', 'ayy'),
-(22, 1, 2, '2023-05-03 21:02:09', 'Awesome Comment');
+(22, 1, 2, '2023-05-03 21:02:09', 'Awesome Comment'),
+(23, 5, 4, '2023-05-03 21:37:24', 'le'),
+(24, 1, 4, '2023-05-03 21:37:44', 'sam'),
+(25, 1, 2, '2023-05-04 17:24:22', 'le');
 
 -- --------------------------------------------------------
 
@@ -100,6 +103,18 @@ CREATE TABLE `plays` (
   `time_stamp` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `plays`
+--
+
+INSERT INTO `plays` (`set_id`, `track_id`, `was_mandatory`, `time_stamp`) VALUES
+(1, 2, 0, '2023-05-04 09:19:47'),
+(1, 4, 1, '2023-05-04 09:21:10'),
+(1, 1, 1, '2023-05-04 09:21:20'),
+(1, 3, 0, '2023-05-04 09:21:39'),
+(4, 2, 0, '2023-05-05 09:30:15'),
+(5, 2, 0, '2023-05-04 09:50:55');
+
 -- --------------------------------------------------------
 
 --
@@ -111,6 +126,36 @@ CREATE TABLE `sets` (
   `show_id` int(11) NOT NULL,
   `set_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sets`
+--
+
+INSERT INTO `sets` (`set_id`, `show_id`, `set_date`) VALUES
+(1, 2, '2023-05-04 16:19:05'),
+(4, 2, '2023-05-05 09:29:59'),
+(5, 4, '2023-05-04 16:47:10');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `set_info`
+-- (See below for the actual view)
+--
+CREATE TABLE `set_info` (
+`set_id` int(11)
+,`track_id` int(11)
+,`track_name` varchar(100)
+,`track_runtime` int(11)
+,`track_artist` varchar(50)
+,`track_album` varchar(50)
+,`category` varchar(50)
+,`mandatory` tinyint(1)
+,`time_stamp` datetime
+,`show_id` int(11)
+,`show_name` varchar(100)
+,`set_date` datetime
+);
 
 -- --------------------------------------------------------
 
@@ -133,8 +178,8 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`show_id`, `show_name`, `show_desc`, `show_pic`, `start_time`, `end_time`, `day_of_week`) VALUES
-(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy ', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/718smiley.svg/2048px-718smiley.svg.png', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2),
-(4, '60minutesofsilence', 'music🎶🎶🎶 le le', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 5);
+(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy ', 'https://cdn.wallpapersafari.com/50/3/rNa1x2.jpg', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2),
+(4, '60minutesofsilence', 'music🎶🎶🎶 le le le', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 5);
 
 -- --------------------------------------------------------
 
@@ -171,6 +216,17 @@ CREATE TABLE `tracks` (
   `category` varchar(50) NOT NULL,
   `mandatory` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tracks`
+--
+
+INSERT INTO `tracks` (`track_id`, `track_name`, `track_runtime`, `track_artist`, `track_album`, `category`, `mandatory`) VALUES
+(1, 'Mr Blue Sky', 180, 'Electric Light Orchestra', 'Out of The Blue', 'Pop', 0),
+(2, 'Airbreak', -1, 'KANM DJs', 'KANM', 'Airbreak', 0),
+(3, 'Birds of a Feather', 180, 'Kind of Like Spitting', 'Nothing Makes Sense Without It', 'Midwest Emo', 0),
+(4, 'Foreign', 184, 'Playboi Carti', 'Die Lit', 'Rap', 0),
+(5, 'Scary Monsters and Nice Sprites', 160, 'Skrillex', 'Scary Monsters and Nice Sprites EP', 'Dubstep', 0);
 
 -- --------------------------------------------------------
 
@@ -250,6 +306,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `set_info`
+--
+DROP TABLE IF EXISTS `set_info`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `set_info`  AS SELECT `s`.`set_id` AS `set_id`, `t`.`track_id` AS `track_id`, `t`.`track_name` AS `track_name`, `t`.`track_runtime` AS `track_runtime`, `t`.`track_artist` AS `track_artist`, `t`.`track_album` AS `track_album`, `t`.`category` AS `category`, `t`.`mandatory` AS `mandatory`, `p`.`time_stamp` AS `time_stamp`, `sh`.`show_id` AS `show_id`, `sh`.`show_name` AS `show_name`, `s`.`set_date` AS `set_date` FROM (((`plays` `p` join `tracks` `t` on(`p`.`track_id` = `t`.`track_id`)) join `sets` `s` on(`s`.`set_id` = `p`.`set_id`)) join `shows` `sh` on(`sh`.`show_id` = `s`.`show_id`)) ORDER BY `s`.`set_id` ASC, `p`.`time_stamp` ASC ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `user_comments`
 --
 DROP TABLE IF EXISTS `user_comments`;
@@ -324,13 +389,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `sets`
 --
 ALTER TABLE `sets`
-  MODIFY `set_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `set_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `shows`
@@ -342,7 +407,7 @@ ALTER TABLE `shows`
 -- AUTO_INCREMENT for table `tracks`
 --
 ALTER TABLE `tracks`
-  MODIFY `track_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `track_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

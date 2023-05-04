@@ -1,15 +1,16 @@
 
-import { Button, Image, Row, Col, Form } from 'react-bootstrap';
+import { Button, Image, Row, Col, Form, Accordion, Card,ListGroup} from 'react-bootstrap';
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ShowData, Comment, User, UserShowData } from './types.js';
+import type { ShowData, Comment, User, UserShowData, ShowSets } from './types.js';
 import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import useAdmin from '../hooks/useAdmin.js';
+
 
 
 function Shows() {
@@ -31,6 +32,7 @@ function Shows() {
   const [newName, setNewName] = useState<string>(showData.show_name);
   const [newDesc, setNewDesc] = useState<string>(showData.show_desc);
   const [newPic, setNewPic] = useState<string>(showData.show_pic);
+  const [showSets, setShowSets] = useState<ShowSets>({});
 
   const [showID, setShowID] = useLocalStorageShowID();
   const [isAdmin, setIsAdmin] = useAdmin();
@@ -106,7 +108,18 @@ function Shows() {
         setNewName(data[0].show_name);
         setNewDesc(data[0].show_desc);
         setNewPic(data[0].show_pic);
-        setIsLoading(false);
+        fetch(`http://localhost/kanm-310/react/php/getSets.php?function=getSetsByShowID&id=${id}`)
+  .then(response => response.json())
+  .then(data => {setShowSets( data.reduce((acc, curr) => {
+    const set_id = curr.set_id;
+    if (!acc[set_id]) {
+      acc[set_id] = [];
+    }
+    acc[set_id].push(curr);
+    return acc;
+  }, {}) );
+  setIsLoading(false);});
+        
       }
       
       else{
@@ -142,6 +155,12 @@ function Shows() {
     fetch(`http://localhost/kanm-310/react/php/getComments.php?function=getComments&input=${id}`)
     .then(response => response.json())
     .then(data => setComments(data));
+}, []);
+
+//http://localhost/kanm-310/react/php/getSets.php?function=getSetsByShowID&id=2
+useEffect(() => {
+  // Make a GET request to the PHP backend function
+  
 }, []);
 
 const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,6 +219,7 @@ const handleShowSubmit = () => {
           <Col xs={11} md={6}>
             <p> {showData.show_name} </p>
             <p> {showData.show_desc} </p>
+
             <p> DJs: {DJs.map((user,i) => {
               if(i == DJs.length-1) {
                 return user.username
@@ -209,9 +229,45 @@ const handleShowSubmit = () => {
               }
               
             })} </p>
+             <Accordion>
+      {Object.entries(showSets).map(([setId, trackList]) => (
+        <Accordion.Item eventKey={setId}>
+        <Accordion.Header>{trackList.length >= 1? trackList[0].set_date : "Unknown Date" }</Accordion.Header>
+        <Accordion.Body>
+        <ListGroup>
+      
+    
+      
+                {trackList.map((track) => (
+                  <ListGroup.Item key={track.track_id}>
+                    {track.time_stamp}: {track.track_name} - {track.track_artist}
+                    </ListGroup.Item>
+                ))}
+              
+              </ListGroup>
+        </Accordion.Body>
+      </Accordion.Item>
+        // <Card key={setId}>
+        //   <Accordion.Toggle as={Card.Header} eventKey={setId}>
+        //     Set {setId}
+        //   </Accordion.Toggle>
+        //   <Accordion.Collapse eventKey={setId}>
+        //     <Card.Body>
+        //       <ul>
+        //         {trackList.map((track) => (
+        //           <li key={track.track_id}>
+        //             {track.track_name} - {track.track_artist}
+        //           </li>
+        //         ))}
+        //       </ul>
+        //     </Card.Body>
+        //   </Accordion.Collapse>
+        // </Card>
+      ))}
+    </Accordion> 
           </Col>
           <Col xs={1} md={1}>
-          {showID === id || isAdmin &&
+          {(showID === id || isAdmin) &&
           <Button variant="primary" onClick={() => setIsEditingShow(true)}>
               Edit
             </Button>
