@@ -379,9 +379,11 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
             <Button variant="primary" onClick={() => handleShowSubmit()}>
               Save
             </Button>
-            <Button variant="secondary" onClick={() => setIsEditingShow(false)}>
-              Cancel
-            </Button>
+            <div className='pt-2'>
+              <Button variant="secondary" onClick={() => setIsEditingShow(false)}>
+                Cancel
+              </Button>
+            </div>
           </Col>
           </>
           }
