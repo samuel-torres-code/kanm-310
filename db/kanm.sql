@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 04, 2023 at 05:43 PM
+-- Generation Time: May 05, 2023 at 09:53 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -366,7 +366,7 @@ ALTER TABLE `shows`
 -- Indexes for table `show_hosts`
 --
 ALTER TABLE `show_hosts`
-  ADD PRIMARY KEY (`user_id`),
+  ADD PRIMARY KEY (`user_id`,`show_id`),
   ADD KEY `show_id_fk` (`show_id`);
 
 --
