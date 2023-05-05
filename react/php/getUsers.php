@@ -67,7 +67,21 @@ function getUserDataID($user_id) {
     
 }
 
+function getUsersNotHostingShow($show_id) {
+  include_once './dbconfig.php';
 
+  $sql = "SELECT * FROM users WHERE NOT EXISTS (SELECT users.user_id FROM show_hosts WHERE users.user_id = show_hosts.user_id AND show_hosts.show_id = $show_id)";
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows);
+
+    $conn->close();
+    
+}
 
 // Check if the request method is GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -79,6 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if ($_GET['function'] === 'getUserDataID') {
     // Call the function and return the result as a JSON object
     getUserDataID($_GET['id']);
+  }
+  if ($_GET['function'] === 'getUsersNotHostingShow') {
+    // Call the function and return the result as a JSON object
+    getUsersNotHostingShow($_GET['id']);
   }
   if ($_GET['function'] === 'getUserData') {
     // Call the function and return the result as a JSON object

@@ -94,21 +94,24 @@ function Header() {
           </Nav>
           <Nav className="ml-auto mr-2">
             {showAdminToggle &&
-            <ToggleButton
-              className="mb-2"
-              id="toggle-check"
-              type="checkbox"
-              variant="outline-primary"
-              checked={isAdmin}
-              value="1"
-              onChange={(e) => {
-                const value = e.currentTarget.checked;
-                setIsAdmin(value);
-                localStorage.setItem("isAdmin", value.toString());
-              }}
-            >
-              Admin
-            </ToggleButton>
+            <div className="pe-2">
+              <ToggleButton
+                className="mb-2"
+                id="toggle-check"
+                type="checkbox"
+                variant="outline-primary"
+                checked={isAdmin}
+                value="1"
+                onChange={(e) => {
+                  const value = e.currentTarget.checked;
+                  setIsAdmin(value);
+                  localStorage.setItem("isAdmin", value.toString());
+                  window.location.reload()
+                }}
+              >
+                Admin
+              </ToggleButton>
+            </div>
 }
             {!userID && <>
             <Button className="mb-2" onClick={() => setShowLoginModal(true)}>Login</Button>

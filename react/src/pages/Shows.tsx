@@ -3,7 +3,7 @@ import { Button, Image, Row, Col, Form, Accordion, Card,ListGroup} from 'react-b
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ShowData, Comment, User, UserShowData, ShowSets } from './types.js';
+import type { ShowData, Comment, User, UserShowData, ShowSets, SongPlay } from './types.js';
 import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
@@ -110,12 +110,13 @@ function Shows() {
         setNewPic(data[0].show_pic);
         fetch(`http://localhost/kanm-310/react/php/getSets.php?function=getSetsByShowID&id=${id}`)
   .then(response => response.json())
-  .then(data => {setShowSets( data.reduce((acc, curr) => {
+  .then(data => {setShowSets( data.reduce((acc: ShowSets, curr: SongPlay) => {
     const set_id = curr.set_id;
     if (!acc[set_id]) {
       acc[set_id] = [];
     }
     acc[set_id].push(curr);
+    console.log("test", acc, curr)
     return acc;
   }, {}) );
   setIsLoading(false);});
@@ -202,6 +203,32 @@ const handleShowSubmit = () => {
   setIsEditingShow(false);
 };
 
+const handleTest = () => {
+  console.log("test")
+}
+
+const handlePlayDelete = (set_id : string, track_id : string) => {
+  let data = JSON.stringify({set_id: set_id, track_id: track_id});
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'http://localhost/kanm-310/react/php/deletePlay.php?function=deletePlay',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+    window.location.reload();
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
   return (
 
@@ -229,22 +256,53 @@ const handleShowSubmit = () => {
               }
               
             })} </p>
-             <Accordion>
+      {(showID === id || isAdmin) &&
+        <div className='pb-2'>
+          <Button variant="primary" onClick={() => handleTest()}>
+            Add Set
+          </Button>
+        </div>
+      }
+      <Accordion>
       {Object.entries(showSets).map(([setId, trackList]) => (
         <Accordion.Item eventKey={setId}>
-        <Accordion.Header>{trackList.length >= 1? trackList[0].set_date : "Unknown Date" }</Accordion.Header>
+        <Accordion.Header>
+          {trackList.length >= 1? trackList[0].set_date : "Unknown Date" }
+          {(showID === id || isAdmin) &&
+            <div className="ps-2">
+              <Button variant="primary" onClick={() => handleTest()}>
+                Edit
+              </Button>
+              {' '}
+              <Button variant="secondary" onClick={() => handleTest()}>
+                Add Track
+              </Button>
+              {' '}
+              <Button variant="secondary" onClick={() => handleTest()}>
+                Delete
+              </Button>
+            </div>
+          }
+        </Accordion.Header>
         <Accordion.Body>
-        <ListGroup>
-      
-    
-      
-                {trackList.map((track) => (
-                  <ListGroup.Item key={track.track_id}>
-                    {track.time_stamp}: {track.track_name} - {track.track_artist}
-                    </ListGroup.Item>
-                ))}
-              
-              </ListGroup>
+          <ListGroup>
+            {trackList.map((track) => (
+              <ListGroup.Item key={track.track_id}>
+                {track.time_stamp}: {track.track_name} - {track.track_artist}
+                {(showID === id || isAdmin) &&
+                  <div>
+                    <Button variant="primary" onClick={() => handleTest()}>
+                      Edit
+                    </Button>
+                    {' '}
+                    <Button variant="secondary" onClick={() => handlePlayDelete(setId, track.track_id)}>
+                      Delete
+                    </Button>
+                  </div>
+                }
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
         </Accordion.Body>
       </Accordion.Item>
         // <Card key={setId}>
@@ -321,9 +379,11 @@ const handleShowSubmit = () => {
             <Button variant="primary" onClick={() => handleShowSubmit()}>
               Save
             </Button>
-            <Button variant="secondary" onClick={() => setIsEditingShow(false)}>
-              Cancel
-            </Button>
+            <div className='pt-2'>
+              <Button variant="secondary" onClick={() => setIsEditingShow(false)}>
+                Cancel
+              </Button>
+            </div>
           </Col>
           </>
           }
@@ -346,7 +406,9 @@ const handleShowSubmit = () => {
           <Form.Label>Write a comment:</Form.Label>
           <Form.Control as="textarea" rows={3} value={comment} onChange={handleCommentChange} />
         </Form.Group>
-        <Button type="submit">Submit</Button>
+        <div className='py-2'>
+          <Button type="submit">Submit</Button>
+        </div>
       </Form> }
 
       <Table striped bordered hover>
