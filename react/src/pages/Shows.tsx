@@ -91,7 +91,11 @@ function Shows() {
       console.log(JSON.stringify(error));
     });
   }
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // The following code (lines 97-150):
+  // Author: Liam Ramsey
+  // Description: Integrates updating and deleting comments using react and the backend functions
+
   const [editIndex, setEditIndex] = useState(-1);
   const [editedComment, setEditedComment] = useState('');
   const [editedCommentID, setEditedCommentID] = useState(-1);
@@ -431,6 +435,10 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
 }
 
       
+      {/* 
+        Author: Liam Ramsey
+        Description: Displays a comment box if a user is signed in and displays all comments in a table.  
+      */}
 
       {userID &&<Form onSubmit={handleSubmit}>
         <Form.Group controlId="exampleForm.ControlTextarea1">
