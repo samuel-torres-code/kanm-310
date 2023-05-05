@@ -10,7 +10,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import useAdmin from '../hooks/useAdmin.js';
-
+import { IconButton } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function Shows() {
@@ -88,6 +90,66 @@ function Shows() {
     .catch((error) => {
       console.log(JSON.stringify(error));
     });
+  }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [editIndex, setEditIndex] = useState(-1);
+  const [editedComment, setEditedComment] = useState('');
+  const [editedCommentID, setEditedCommentID] = useState(-1);
+
+  const handleEditClick = (index: number, commentText: string, editedID: number) => {
+    setEditIndex(index);
+    setEditedComment(commentText);
+    setEditedCommentID(editedID);
+  };
+
+  const handleCancelClick = () => {
+    setEditIndex(-1);
+    setEditedComment('');
+  };
+
+  function updateComment(commentId: number, newCommentText: string): Promise<void> {
+    return axios.post('http://localhost/kanm-310/react/php/updateComment.php?function=updateComment', {
+      comment_id: commentId,
+      new_comment_text: newCommentText,
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  function deleteComment(commentId: number): Promise<void> {
+    return axios.post('http://localhost/kanm-310/react/php/deleteComment.php?function=deleteComment', {
+      comment_id: commentId
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  const handleSaveClick = (index: number) => {
+    // handle saving edited comment to backend
+    updateComment(editedCommentID, editedComment)
+      .then(() => {
+        // Once the update is complete, reset the editing state
+        setEditedCommentID(-1);
+        setEditedComment('');
+        setEditIndex(-1);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteComment = (commentID: number) => {
+    deleteComment(commentID);
+    window.location.reload();
   }
 
   
@@ -425,11 +487,43 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
               if (obj1.time_stamp > obj2.time_stamp) return -1;
               return 1
             })
-          .map((comment) => (
+          .map((comment, index) => (
           <tr key ={comment.time_stamp}>
               <td>{comment.username}</td>
               <td>{comment.time_stamp}</td>
-              <td>{comment.comment_text}</td>
+              <td>
+                {editIndex === index ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editedComment}
+                      onChange={(e) => setEditedComment(e.target.value)}
+                    />
+                    <button onClick={() => handleSaveClick(index)}>Save</button>
+                    <button onClick={() => handleCancelClick()}>Cancel</button>
+                  </>
+                ) : (
+                  comment.comment_text
+                )}
+              </td>
+              { (userID === comment.user_id || isAdmin) && (
+                <td>
+                  {editIndex === index ? null : (
+                    <IconButton onClick={() => handleEditClick(index, comment.comment_text, comment.comment_id)}>
+                      <EditIcon />
+                    </IconButton>
+                  )}
+                </td>
+              )}
+              { (userID === comment.user_id || isAdmin) && (
+                <td>
+                  {editIndex === index ? null : (
+                    <IconButton onClick={() => handleDeleteComment(comment.comment_id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
+                </td>
+              )}
           </tr>
             ))}
         </tbody>
