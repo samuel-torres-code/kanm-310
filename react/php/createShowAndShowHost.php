@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-function createShow($show_name, $show_desc, $show_pic, $start_time, $end_time, $day_of_week) {
+function createShowAndShowHost($show_name, $show_desc, $show_pic, $start_time, $end_time, $day_of_week, $user_id) {
   // Create a connection to the database
   $servername = "localhost";
   $uname = "root";
@@ -26,7 +26,16 @@ function createShow($show_name, $show_desc, $show_pic, $start_time, $end_time, $
     $stmt = $conn->prepare($query);
 
     if($stmt->execute()){
-        return true;
+        $query2 = "INSERT INTO show_hosts SET user_id={$user_id}, show_id=(SELECT LAST_INSERT_ID())";
+        
+        // prepare the 2nd query
+        $stmt = $conn->prepare($query2);
+
+        if($stmt->execute()) {
+            return true;
+        }else{
+            return false;
+        }
     }else{
         return false;
     }
@@ -41,9 +50,10 @@ $show_pic = $data->show_pic;
 $start_time = $data->start_time;
 $end_time = $data->end_time;
 $day_of_week = $data->day_of_week;
+$user_id = $data->user_id;
 
 // Call the updateUser function with the provided parameters
-if(!empty($show_name) && !empty($show_desc) && !empty($show_pic) && !empty($start_time) && !empty($end_time) && !empty($day_of_week)) {
-    createShow($show_name, $show_desc, $show_pic, $start_time, $end_time, $day_of_week);
+if(!empty($show_name) && !empty($show_desc) && !empty($show_pic) && !empty($start_time) && !empty($end_time) && !empty($day_of_week) && !empty($user_id)) {
+    createShowAndShowHost($show_name, $show_desc, $show_pic, $start_time, $end_time, $day_of_week, $user_id);
 }
 ?>

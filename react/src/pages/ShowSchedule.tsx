@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import internal from 'stream';
 import { ShowData, User, UserShowData } from './types';
+import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useAdmin from '../hooks/useAdmin.js';
 
 
@@ -27,9 +28,12 @@ function ShowSchedule() {
     // state for user inputs when adding a new show
     const [newShowName, setNewShowName] = useState<string>()
     const [newShowStart, setNewShowStart] = useState<string>()
-    const [newShowEnd, setNewShowEnd] = useState<string>()
+    const [newShowHour, setNewShowHour] = useState<string>()
+    const [newShowDuration, setNewShowDuration] = useState<string>()
     const [newShowDescription, setNewShowDescription] = useState<string>()
     const [newShowPicture, setNewShowPicture] = useState<string>()
+    // UserID for creating new show
+    const [userID, setUserID] = useLocalStorageUserID()
 
     useEffect(() => {
         // Make a GET request to the PHP backend function
@@ -129,37 +133,26 @@ function ShowSchedule() {
     }
 
     const handleAddShow = () => {
-        let start_str = typeof newShowStart === "string" ? newShowStart : ''
-        let [start_dateStr, start_timeStr] = start_str.split(' ')
-        let [start_month, start_day, start_year] = start_dateStr.split('/')
-        let [start_hour, start_minute] = start_timeStr.split(':')
-        let start_date = new Date(
-            +start_year,
-            +start_month - 1,
-            +start_day,
-            +start_hour,
-            +start_minute
+        let startDateStr = typeof newShowStart === "string" ? newShowStart : ''
+        let [startMonth, startDay, startYear] = startDateStr.split('/')
+        let startHour = typeof newShowHour === "string" ? newShowHour : ''
+        let startDate = new Date(
+            +startYear,
+            +startMonth - 1,
+            +startDay,
+            +startHour
         )
-        let end_str = typeof newShowEnd === "string" ? newShowEnd : ''
-        let [end_dateStr, end_timeStr] = end_str.split(' ')
-        let [end_month, end_day, end_year] = end_dateStr.split('/')
-        let [end_hour, end_minute] = end_timeStr.split(':')
-        let end_date = new Date(
-            +end_year,
-            +end_month - 1,
-            +end_day,
-            +end_hour,
-            +end_minute
-        )
-        let sqlStartDatetime = '\"' + start_year + '-' + start_month + '-' + start_day + ' ' + start_hour + ":" + start_minute + ':00\"'
-        let sqlEndDatetime = '\"' + end_year + '-' + end_month + '-' + end_day + ' ' + end_hour + ":" + end_minute + ':00\"'
+        let endHour = String(Number(newShowDuration) + Number(startHour))
+        let sqlStartDatetime = '\"' + startYear + '-' + startMonth + '-' + startDay + ' ' + startHour + ':00:00\"'
+        let sqlEndDatetime = '\"' + startYear + '-' + startMonth + '-' + startDay + ' ' + endHour + ':00:00\"'
         let data = JSON.stringify({show_name: '\"' + newShowName + '\"', show_desc: '\"' + newShowDescription + '\"',
-            show_pic: '\"' + newShowPicture + '\"', start_time: sqlStartDatetime, end_time: sqlEndDatetime, day_of_week: start_date.getDay()});
+            show_pic: '\"' + newShowPicture + '\"', start_time: sqlStartDatetime, end_time: sqlEndDatetime, 
+            day_of_week: startDate.getDay(), user_id: userID});
 
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'http://localhost/kanm-310/react/php/createShow.php?function=createShow',
+            url: 'http://localhost/kanm-310/react/php/createShowAndShowHost.php?function=createShowAndShowHost',
             headers: { 
             'Content-Type': 'application/json'
             },
@@ -323,10 +316,12 @@ function ShowSchedule() {
                 <div className='pb-2'>
                     <p>Show Name: </p>
                     <input type="text" value={newShowName} onChange={event => setNewShowName(event.target.value)} />
-                    <p className='pt-2'>Start Time (MM/DD/YYYY HH:MM): </p>
+                    <p className='pt-2'>Start Date (MM/DD/YYYY): </p>
                     <input type="text" value={newShowStart} onChange={event => setNewShowStart(event.target.value)} />
-                    <p className='pt-2'>End Time (MM/DD/YYYY HH:MM): </p>
-                    <input type="text" value={newShowEnd} onChange={event => setNewShowEnd(event.target.value)} />
+                    <p className='pt-2'>Start Hour (HH): </p>
+                    <input type="text" value={newShowHour} onChange={event => setNewShowHour(event.target.value)} />
+                    <p className='pt-2'>Duration In Hours: </p>
+                    <input type="text" value={newShowDuration} onChange={event => setNewShowDuration(event.target.value)} />
                     <p className='pt-2'>Description: </p>
                     <input type="text" value={newShowDescription} onChange={event => setNewShowDescription(event.target.value)} />
                     <p className='pt-2'>Picture Link: </p>
@@ -334,7 +329,7 @@ function ShowSchedule() {
                 </div>
             }
             {// code for Add Show button
-            !isEditingDJs && !isAddingShow &&
+            !isEditingDJs && !isAddingShow && !(typeof userID === "undefined") &&
                 <div className='pb-2'>
                     <Button variant="primary" onClick={() => handleAddShowViewChange()}>
                         Add Show
