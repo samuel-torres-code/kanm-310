@@ -1,8 +1,8 @@
 <?php
   /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
-    
+    Author: Elijah Sanders
+    Description: Creates an API endpoint that handles delete statements for the show hosts table
+
 */
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
