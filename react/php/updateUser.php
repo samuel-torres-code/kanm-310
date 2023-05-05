@@ -5,6 +5,10 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
+/* 
+    Author: Charlotte Harrington
+    Description: This is a backend function that 
+*/
 function updateUser($user_id, $uname, $pword, $email, $first_name, $last_name) {
   include_once './dbconfig.php';
 
@@ -14,13 +18,6 @@ function updateUser($user_id, $uname, $pword, $email, $first_name, $last_name) {
   echo json_encode($sql);
   $stmt = $conn->prepare($sql);
   $stmt->execute();
-
-  // Check if the update was successful
-//   if ($stmt->rowCount() > 0) {
-//     echo "User with ID $user_id has been updated successfully";
-//   } else {
-//     echo "Failed to update user with ID $user_id";
-//   }
 }
 
 // get posted data
