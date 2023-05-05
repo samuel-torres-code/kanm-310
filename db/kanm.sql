@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 05, 2023 at 09:53 AM
+-- Generation Time: May 05, 2023 at 07:24 PM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -47,7 +47,7 @@ INSERT INTO `comments` (`comment_id`, `user_id`, `show_id`, `time_stamp`, `comme
 (5, 5, 4, '2023-05-02 22:31:54', 'r324543rwe'),
 (6, 5, 4, '2023-05-02 22:33:04', '2342'),
 (7, 1, 4, '2023-05-02 22:35:53', 'sam'),
-(8, 1, 4, '2023-05-02 22:39:19', 'my password is password'),
+(8, 1, 4, '2023-05-02 22:39:19', 'swaos'),
 (9, 2, 4, '2023-05-02 22:39:46', 'doenut'),
 (10, 2, 2, '2023-05-02 22:41:03', 'samuel tores'),
 (11, 2, 2, '2023-05-02 22:42:51', 'comments'),
@@ -178,8 +178,10 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`show_id`, `show_name`, `show_desc`, `show_pic`, `start_time`, `end_time`, `day_of_week`) VALUES
-(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy ', 'https://cdn.wallpapersafari.com/50/3/rNa1x2.jpg', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2),
-(4, '60minutesofsilence', 'music🎶🎶🎶 le le le', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 5);
+(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy and Liameister swaos', 'https://cdn.wallpapersafari.com/50/3/rNa1x2.jpg', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2),
+(4, '60minutesofsilence', 'music🎶🎶🎶 le le le', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 5),
+(6, 'Awesome', 'Le', 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg', '2022-03-15 04:00:00', '2022-03-15 05:00:00', 2),
+(7, 'Sam\'s Life', 'This is sam\'s LIFE', 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80', '2002-03-25 08:00:00', '2002-03-25 09:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -198,8 +200,11 @@ CREATE TABLE `show_hosts` (
 
 INSERT INTO `show_hosts` (`user_id`, `show_id`) VALUES
 (1, 2),
+(1, 7),
 (2, 2),
-(5, 4);
+(5, 2),
+(5, 4),
+(5, 7);
 
 -- --------------------------------------------------------
 
@@ -254,7 +259,8 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `first_name`, `
 (2, 'dogenut', 'password', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 1),
 (3, 'dogenut', '$2y$10$p.ZZXbMs5hfEVTwodKPMhO7y1HDEwHHlX4CTtyFMGJP.xX4np.BEW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
 (4, 'dogenut', '$2y$10$mH0c1hq9lIjKHGUT92ZA1Oo0VKdi3ongSnBLtX4zxNR6adZ.2P63u', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
-(5, 'liamrams', 'liamrams', 'liamrams@tamu.edu', 'Liam', 'Ramsey', 0, 1);
+(5, 'liamrams', 'liamrams', 'liamrams@tamu.edu', 'Liam', 'Ramsey', 0, 1),
+(6, 'root', '', 'elijah@tamu.edu', 'Elijah', 'Yomama', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -268,6 +274,7 @@ CREATE TABLE `user_comments` (
 ,`time_stamp` datetime
 ,`show_id` int(11)
 ,`username` varchar(100)
+,`user_id` int(11)
 );
 
 -- --------------------------------------------------------
@@ -319,7 +326,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `user_comments`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_comments`  AS SELECT `c`.`comment_id` AS `comment_id`, `c`.`comment_text` AS `comment_text`, `c`.`time_stamp` AS `time_stamp`, `c`.`show_id` AS `show_id`, `u`.`username` AS `username` FROM (`comments` `c` join `users` `u` on(`c`.`user_id` = `u`.`user_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_comments`  AS SELECT `c`.`comment_id` AS `comment_id`, `c`.`comment_text` AS `comment_text`, `c`.`time_stamp` AS `time_stamp`, `c`.`show_id` AS `show_id`, `u`.`username` AS `username`, `u`.`user_id` AS `user_id` FROM (`comments` `c` join `users` `u` on(`c`.`user_id` = `u`.`user_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -360,7 +367,8 @@ ALTER TABLE `sets`
 -- Indexes for table `shows`
 --
 ALTER TABLE `shows`
-  ADD PRIMARY KEY (`show_id`);
+  ADD PRIMARY KEY (`show_id`),
+  ADD UNIQUE KEY `show_id_index` (`show_id`);
 
 --
 -- Indexes for table `show_hosts`
@@ -401,7 +409,7 @@ ALTER TABLE `sets`
 -- AUTO_INCREMENT for table `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tracks`
@@ -413,7 +421,7 @@ ALTER TABLE `tracks`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
