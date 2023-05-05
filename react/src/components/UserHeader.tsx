@@ -4,7 +4,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import Logo from '../assets/logo.png'
 import './Header.css'
 
-
+/*
+  Author: Liam Ramsey
+  Description: Modified header to display user views (Depricated)
+*/
 function UserHeader() {
 
   return (

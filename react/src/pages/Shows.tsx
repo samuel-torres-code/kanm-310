@@ -13,7 +13,10 @@ import useAdmin from '../hooks/useAdmin.js';
 import { IconButton } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+/*
+Author: Liam Ramsey, Samuel Torres, and Elijah Sanders
+Description: Displays and allows DJs and hosts to edit a page for a show and comments
+*/
 
 function Shows() {
   const { id } = useParams<{id: string}>();
@@ -48,6 +51,7 @@ function Shows() {
   const handleCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(event.target.value);
   };
+
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -156,7 +160,10 @@ function Shows() {
     window.location.reload();
   }
 
-  
+  /*
+    Author: Samuel Torres
+    Description: Grabs show and DJ info from DB on page load
+  */
   useEffect(() => {
     // Make a GET request to the PHP backend function
     fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getExtendedShowData&id=${id}`)
@@ -209,6 +216,10 @@ function Shows() {
 
 // }, [id]);
 
+  /*
+    Author: Samuel Torres
+    Description: Converts string of SQL datetime to just the hour and AM/PM
+  */
   const convertTimeText = (text: String) => {
     let hour = parseInt(text.slice(10).split(":")[0]);
     let meridiem = (hour >= 12) ? "PM" : "AM";
@@ -242,6 +253,10 @@ const handlePicChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   setNewPic(e.target.value);
 };
 
+/*
+    Author: Samuel Torres
+    Description: Sends updated show information to the DB for updating
+*/
 const handleShowSubmit = () => {
   setIsLoading(true);
   setShowData({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-
+/*
+  Author: Samuel Torres
+  Description: Creates a login form that will pop up as a modal
+*/
 interface LoginModalProps {
   show: boolean;
   onHide: () => void;
@@ -14,6 +17,10 @@ function LoginModal({ show, onHide, onLogin }: LoginModalProps) {
     "pending"
   );
 
+  /*
+    Author: Samuel Torres
+    Description: Makes an API Request to veify user info before signing in
+  */
   const handleLogin = async () => {
     setAuthStatus("pending");
     try {

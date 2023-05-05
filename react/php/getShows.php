@@ -1,4 +1,9 @@
 <?php
+  /* 
+    Author: Samuel Torres, Liam Ramsay and Elijah Sanders
+    Description: Creates an API endpoint that handles select statements for the shows and user_shows table
+    
+*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");

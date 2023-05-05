@@ -1,4 +1,8 @@
 <?php
+  /* 
+    Author: Samuel Torres
+    Description: Creates an API endpoint that handles update statements for the shows table
+*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");

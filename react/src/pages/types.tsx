@@ -1,5 +1,8 @@
 
-
+/*
+Author: Samuel Torres
+Description: TS Types for DB and View entities
+*/
 export type ShowData = {
     show_id?: string;
     show_name: string;

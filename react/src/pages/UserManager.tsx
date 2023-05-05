@@ -9,7 +9,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import useAdmin from "../hooks/useAdmin";
 import { User } from "./types";
-
+/*
+Author:
+Description:
+*/
 
 function UserManager(){
 

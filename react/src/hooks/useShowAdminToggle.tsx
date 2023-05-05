@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-
+/*
+  Author: Samuel Torres
+  Description: React Hook to store showAdminToggle boolean in local storage and state
+*/
 type HookReturnType = [boolean, (value: boolean) => void];
 
 const useShowAdminToggle = (): HookReturnType => {
