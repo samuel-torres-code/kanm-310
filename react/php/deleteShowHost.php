@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-function deleteHost($show_id, $user_id) {
+function deleteShowHost($show_id, $user_id) {
   
   include_once './dbconfig.php';
   
@@ -28,5 +28,5 @@ $data = json_decode(file_get_contents("php://input"));
 $show_id = $data->show_id;
 $user_id = $data->user_id;
 
-deleteHost($show_id, $user_id);
+deleteShowHost($show_id, $user_id);
 ?>

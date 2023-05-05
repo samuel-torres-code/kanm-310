@@ -57,7 +57,7 @@ function ShowSchedule() {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: 'http://localhost/kanm-310/react/php/deleteHost.php?function=deleteHost',
+            url: 'http://localhost/kanm-310/react/php/deleteShowHost.php?function=deleteShowHost',
             headers: { 
             'Content-Type': 'application/json'
             },
