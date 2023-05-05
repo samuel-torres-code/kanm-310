@@ -20,8 +20,16 @@ function ShowSchedule() {
     const [isAddingDJ, setIsAddingDJ] = useState<boolean>(false)
     // users not hosting show
     const [notHosting, setNotHosting] = useState<User[]>([])
+    // boolean for when a show is being added
+    const [isAddingShow, setIsAddingShow] = useState<boolean>(false)
     // whether or not the user is in admin mode
     const [isAdmin, setIsAdmin] = useAdmin();
+    // state for user inputs when adding a new show
+    const [newShowName, setNewShowName] = useState<string>()
+    const [newShowStart, setNewShowStart] = useState<string>()
+    const [newShowEnd, setNewShowEnd] = useState<string>()
+    const [newShowDescription, setNewShowDescription] = useState<string>()
+    const [newShowPicture, setNewShowPicture] = useState<string>()
 
     useEffect(() => {
         // Make a GET request to the PHP backend function
@@ -115,13 +123,94 @@ function ShowSchedule() {
             console.log(error);
         });
     }
+
+    const handleAddShowViewChange = () => {
+        setIsAddingShow(true)
+    }
+
+    const handleAddShow = () => {
+        let start_str = typeof newShowStart === "string" ? newShowStart : ''
+        let [start_dateStr, start_timeStr] = start_str.split(' ')
+        let [start_month, start_day, start_year] = start_dateStr.split('/')
+        let [start_hour, start_minute] = start_timeStr.split(':')
+        let start_date = new Date(
+            +start_year,
+            +start_month - 1,
+            +start_day,
+            +start_hour,
+            +start_minute
+        )
+        let end_str = typeof newShowEnd === "string" ? newShowEnd : ''
+        let [end_dateStr, end_timeStr] = end_str.split(' ')
+        let [end_month, end_day, end_year] = end_dateStr.split('/')
+        let [end_hour, end_minute] = end_timeStr.split(':')
+        let end_date = new Date(
+            +end_year,
+            +end_month - 1,
+            +end_day,
+            +end_hour,
+            +end_minute
+        )
+        let sqlStartDatetime = '\"' + start_year + '-' + start_month + '-' + start_day + ' ' + start_hour + ":" + start_minute + ':00\"'
+        let sqlEndDatetime = '\"' + end_year + '-' + end_month + '-' + end_day + ' ' + end_hour + ":" + end_minute + ':00\"'
+        let data = JSON.stringify({show_name: '\"' + newShowName + '\"', show_desc: '\"' + newShowDescription + '\"',
+            show_pic: '\"' + newShowPicture + '\"', start_time: sqlStartDatetime, end_time: sqlEndDatetime, day_of_week: start_date.getDay()});
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'http://localhost/kanm-310/react/php/createShow.php?function=createShow',
+            headers: { 
+            'Content-Type': 'application/json'
+            },
+            data : data
+        };
+
+        axios.request(config)
+        .then((response) => {
+            console.log(JSON.stringify(response.data));
+            window.location.reload()
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const handleRemoveShow = (show_id: string | undefined) => {
+        // check for if show is undefined
+        show_id = typeof show_id === "string" ? show_id : "-1"
+        let data = JSON.stringify({show_id: show_id});
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'http://localhost/kanm-310/react/php/deleteShow.php?function=deleteShow',
+            headers: { 
+            'Content-Type': 'application/json'
+            },
+            data : data
+        };
+
+        axios.request(config)
+        .then((response) => {
+            console.log(JSON.stringify(response.data));
+            window.location.reload()
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
     
-    const handleReturn = () => {
+    const handleReturnFromDJ = () => {
         setIsEditingDJs(false)
     }
 
-    const handleCancel = () => {
+    const handleReturnFromAddingDJ = () => {
         setIsAddingDJ(false)
+    }
+    
+    const handleCancelAddingShow = () => {
+        setIsAddingShow(false)
     }
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -129,16 +218,16 @@ function ShowSchedule() {
     // views are organized by how many steps they take to reach, from most to least
     return (
         <div>
-            {// code for title and Add DJ button when adding/removing DJ
+            {// code for title and Add DJ button when adding a new DJ
             isAddingDJ &&
                 <div className='pb-2'>
                     <p>{"Currently editing DJs for " + editingShow?.show_name}</p>
-                    <Button variant="secondary" onClick={() => handleCancel()}>
+                    <Button variant="secondary" onClick={() => handleReturnFromAddingDJ()}>
                         Return
                     </Button>
                 </div>
             }
-            {// code for adding a new DJ view
+            {// code for view when adding a new DJ
             isAddingDJ &&
             <Table striped bordered hover>
                 <thead>
@@ -179,12 +268,12 @@ function ShowSchedule() {
                         Add DJ
                     </Button>
                     {' '}
-                    <Button variant="secondary" onClick={() => handleReturn()}>
+                    <Button variant="secondary" onClick={() => handleReturnFromDJ()}>
                         Return
                     </Button>
                 </div>
             }
-            {// code for adding/removing DJ view
+            {// code for view when adding/removing DJ
             !isAddingDJ && isEditingDJs &&
                 <Table striped bordered hover>
                     <thead>
@@ -217,16 +306,43 @@ function ShowSchedule() {
                     </tbody>
                 </Table>
             }
-            {// code for Add Show button
-            !isEditingDJs &&
+            {// code for Add/Cancel when adding a new show
+            isAddingShow &&
                 <div className='pb-2'>
-                    <Button variant="primary" onClick={() => handleTest()}>
+                    <Button variant="primary" onClick={() => handleAddShow()}>
+                        Confirm
+                    </Button>
+                    {' '}
+                    <Button variant="secondary" onClick={() => handleCancelAddingShow()}>
+                        Cancel
+                    </Button>
+                </div>
+            }
+            {// code for view when adding a new show
+            isAddingShow &&
+                <div className='pb-2'>
+                    <p>Show Name: </p>
+                    <input type="text" value={newShowName} onChange={event => setNewShowName(event.target.value)} />
+                    <p className='pt-2'>Start Time (MM/DD/YYYY HH:MM): </p>
+                    <input type="text" value={newShowStart} onChange={event => setNewShowStart(event.target.value)} />
+                    <p className='pt-2'>End Time (MM/DD/YYYY HH:MM): </p>
+                    <input type="text" value={newShowEnd} onChange={event => setNewShowEnd(event.target.value)} />
+                    <p className='pt-2'>Description: </p>
+                    <input type="text" value={newShowDescription} onChange={event => setNewShowDescription(event.target.value)} />
+                    <p className='pt-2'>Picture Link: </p>
+                    <input type="text" value={newShowPicture} onChange={event => setNewShowPicture(event.target.value)} />
+                </div>
+            }
+            {// code for Add Show button
+            !isEditingDJs && !isAddingShow &&
+                <div className='pb-2'>
+                    <Button variant="primary" onClick={() => handleAddShowViewChange()}>
                         Add Show
                     </Button>
                 </div>
             }
             {// code for regular schedule view
-            !isEditingDJs &&
+            !isEditingDJs && !isAddingShow &&
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -262,7 +378,7 @@ function ShowSchedule() {
                                         Edit DJs
                                     </Button>
                                     <div className='pt-2'>
-                                        <Button variant="secondary" onClick={() => handleTest()}>
+                                        <Button variant="secondary" onClick={() => handleRemoveShow(show.show_id)}>
                                             Delete
                                         </Button>
                                     </div>

@@ -3,7 +3,7 @@ import { Button, Image, Row, Col, Form, Accordion, Card,ListGroup} from 'react-b
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ShowData, Comment, User, UserShowData, ShowSets } from './types.js';
+import type { ShowData, Comment, User, UserShowData, ShowSets, SongPlay } from './types.js';
 import { days } from './types.js';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
@@ -110,7 +110,7 @@ function Shows() {
         setNewPic(data[0].show_pic);
         fetch(`http://localhost/kanm-310/react/php/getSets.php?function=getSetsByShowID&id=${id}`)
   .then(response => response.json())
-  .then(data => {setShowSets( data.reduce((acc, curr) => {
+  .then(data => {setShowSets( data.reduce((acc: ShowSets, curr: SongPlay) => {
     const set_id = curr.set_id;
     if (!acc[set_id]) {
       acc[set_id] = [];
