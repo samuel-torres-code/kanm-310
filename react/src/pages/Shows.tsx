@@ -318,50 +318,19 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
               }
               
             })} </p>
-      {(showID === id || isAdmin) &&
-        <div className='pb-2'>
-          <Button variant="primary" onClick={() => handleTest()}>
-            Add Set
-          </Button>
-        </div>
-      }
+      
       <Accordion>
       {Object.entries(showSets).map(([setId, trackList]) => (
         <Accordion.Item eventKey={setId}>
         <Accordion.Header>
           {trackList.length >= 1? trackList[0].set_date : "Unknown Date" }
-          {(showID === id || isAdmin) &&
-            <div className="ps-2">
-              <Button variant="primary" onClick={() => handleTest()}>
-                Edit
-              </Button>
-              {' '}
-              <Button variant="secondary" onClick={() => handleTest()}>
-                Add Track
-              </Button>
-              {' '}
-              <Button variant="secondary" onClick={() => handleTest()}>
-                Delete
-              </Button>
-            </div>
-          }
+          
         </Accordion.Header>
         <Accordion.Body>
           <ListGroup>
             {trackList.map((track) => (
               <ListGroup.Item key={track.track_id}>
                 {track.time_stamp}: {track.track_name} - {track.track_artist}
-                {(showID === id || isAdmin) &&
-                  <div>
-                    <Button variant="primary" onClick={() => handleTest()}>
-                      Edit
-                    </Button>
-                    {' '}
-                    <Button variant="secondary" onClick={() => handlePlayDelete(setId, track.track_id)}>
-                      Delete
-                    </Button>
-                  </div>
-                }
               </ListGroup.Item>
             ))}
           </ListGroup>
