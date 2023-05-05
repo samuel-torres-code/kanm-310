@@ -1,4 +1,9 @@
 <?php
+  /* 
+    Author: Samuel Torres, Liam Ramsay and Elijah Sanders
+    Description: Creates an API endpoint that handles select statements for the shows and user_shows table
+    
+*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
@@ -44,6 +49,24 @@ function getShowData($id) {
     $conn->close();
     
 }
+
+function getExtendedShowData($id) {
+  include_once './dbconfig.php';
+  
+  $sql = "SELECT * FROM user_show where show_id = {$id}";
+  //echo json_encode($sql);
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows);
+
+    $conn->close();
+    
+}
+
 function getShowDataFromUser($u_id) {
   include_once './dbconfig.php';
   
@@ -55,6 +78,22 @@ function getShowDataFromUser($u_id) {
         $rows[] = $r;
     }
     echo json_encode($rows[0]);
+
+    $conn->close();
+    
+}
+
+function getHostUsersByShowId($show_id) {
+  include_once './dbconfig.php';
+
+  $sql = "SELECT * FROM show_hosts INNER JOIN users ON show_hosts.user_id = users.user_id WHERE show_hosts.show_id = {$show_id}";
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows);
 
     $conn->close();
     
@@ -78,6 +117,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     
   }
+  if ($_GET['function'] === 'getExtendedShowData') {
+    // Call the function and return the result as a JSON object
+    if($_GET['id']) {
+      getExtendedShowData($_GET['id']);
+    }
+    else {
+      getExtendedShowData(-1);
+    }
+    
+  }
   if ($_GET['function'] === 'getShowDataFromUser') {
     // Call the function and return the result as a JSON object
     if($_GET['id']) {
@@ -85,6 +134,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     else {
       getShowDataFromUser(-1);
+    }
+    
+  }
+  if ($_GET['function'] === 'getHostUsersByShowId') {
+    // Call the function and return the result as a JSON object
+    if($_GET['id']) {
+      getHostUsersByShowId($_GET['id']);
+    }
+    else {
+      getHostUsersByShowId(-1);
     }
     
   }

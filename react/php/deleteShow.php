@@ -10,18 +10,18 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-function deleteUser($user_id) {
+function deleteShow($show_id) {
   
   include_once './dbconfig.php';
   
   //SQL query
-  $sql = "DELETE FROM users WHERE user_id = $user_id";
+  $sql = "DELETE FROM shows WHERE show_id=$show_id";
   
   // Execute the query
   if (mysqli_query($conn, $sql)) {
-    echo "User deleted successfully";
+    echo "Show deleted successfully";
   } else {
-    echo "Error deleting user: " . mysqli_error($conn);
+    echo "Error deleting show: " . mysqli_error($conn);
   }
   
   // Close the connection
@@ -30,7 +30,7 @@ function deleteUser($user_id) {
 }
 
 $data = json_decode(file_get_contents("php://input"));
-$user_id = $data->user_id;
+$show_id = $data->show_id;
 
-deleteUser($user_id);
+deleteShow($show_id);
 ?>

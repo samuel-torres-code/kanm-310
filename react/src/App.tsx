@@ -10,6 +10,11 @@ import Header from './components/Header'
 import UserHeader from './components/UserHeader'
 import Shows from './pages/Shows'
 import UserProfile from './pages/UserProfile'
+import discs from './assets/discs.jpg'
+/*
+  Author: Samuel Torres
+  Description: Defines routes for react app
+*/
 
 
 function App() {
@@ -19,7 +24,10 @@ function App() {
       <Header/>
       <div style={{margin: "20px"}}>
       <Routes>
-        <Route path="/" element={ <p>Im like hey whats up hello</p> } />
+        <Route path="/" element={ <div style={{ textAlign: "center" }}>
+      <h1>Welcome to KANM 😎. Please sign in to view all options.</h1>
+      <img style={{ maxHeight: "50vh", maxWidth: "100%" }}src={discs}  alt="CDs stacked up" />
+    </div> } />
         <Route path="userschedule" element={ <ShowSchedule/> } />
         <Route path="schedule" element={ <ShowSchedule/> } />
         <Route path="users" element={ <UserManager/> } />

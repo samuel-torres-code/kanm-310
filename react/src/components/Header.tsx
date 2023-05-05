@@ -12,7 +12,10 @@ import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import LoginModal from "./LoginModal";
 import useShowAdminToggle from "../hooks/useShowAdminToggle";
-
+/*
+Author: Samuel Torres
+Description: Makes a responsive header with a login functionality and admin togger
+*/
 function Header() {
 
   const [showAdminToggle, setShowAdminToggle] = useShowAdminToggle();
@@ -22,6 +25,10 @@ function Header() {
   const [userID, setUserID] = useLocalStorageUserID();
   const [showID, setShowID] = useLocalStorageShowID();
 
+  /*
+    Author: Samuel Torres
+    Description: Makes a request to the backend to verify login credentials
+  */
   const handleLogin = (username: string, password: string) => {
     fetch(
       `http://localhost/kanm-310/react/php/getUsers.php?function=getUserData&username=${username}&password=${password}`
@@ -29,13 +36,21 @@ function Header() {
       .then((response) => response.json())
       .then((data) => {
         setUserID(data.user_id);
+        setShowAdminToggle(data.is_admin === "1");
         if(data.is_dj === "1") {
           fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getShowDataFromUser&id=${data.user_id}`).then((res) => res.json()).then((data)=> {
             console.log(data);
             setShowID(data.show_id);
+            window.location.reload();
           })
         }
-        setShowAdminToggle(data.is_admin === "1")
+        else {
+          setShowID(undefined);
+          window.location.reload();
+        }
+        
+        
+
       });
   };
 
@@ -60,58 +75,57 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
             {isAdmin && (
-              <>
                 <LinkContainer to="/users">
                   <Nav.Link>User Manager</Nav.Link>
                 </LinkContainer>
+                )}
+                {showID && 
                 <LinkContainer to="/profile">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/schedule">
-                  <Nav.Link>Show Schedule</Nav.Link>
-                </LinkContainer>
-              </>
-            )}
-            {!isAdmin && (
-              <>
-                <LinkContainer to="/profile">
-                  <Nav.Link>My Profile</Nav.Link>
-                </LinkContainer>
+}
                 {showID && 
                 <LinkContainer to={`/shows/${showID}`}>
                   <Nav.Link>My Show</Nav.Link>
                 </LinkContainer>
                 }
-                <LinkContainer to="/userschedule">
+                <LinkContainer to="/schedule">
                   <Nav.Link>Show Schedule</Nav.Link>
                 </LinkContainer>
-              </>
-            )}
+              
+            
+            
+                
+                
+              
           </Nav>
           <Nav className="ml-auto mr-2">
             {showAdminToggle &&
-            <ToggleButton
-              className="mb-2"
-              id="toggle-check"
-              type="checkbox"
-              variant="outline-primary"
-              checked={isAdmin}
-              value="1"
-              onChange={(e) => {
-                const value = e.currentTarget.checked;
-                setIsAdmin(value);
-                localStorage.setItem("isAdmin", value.toString());
-              }}
-            >
-              Admin
-            </ToggleButton>
+            <div className="pe-2">
+              <ToggleButton
+                className="mb-2"
+                id="toggle-check"
+                type="checkbox"
+                variant="outline-primary"
+                checked={isAdmin}
+                value="1"
+                onChange={(e) => {
+                  const value = e.currentTarget.checked;
+                  setIsAdmin(value);
+                  localStorage.setItem("isAdmin", value.toString());
+                  window.location.reload()
+                }}
+              >
+                Admin
+              </ToggleButton>
+            </div>
 }
             {!userID && <>
             <Button className="mb-2" onClick={() => setShowLoginModal(true)}>Login</Button>
             
             </>
   }
-  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false); setShowID(undefined)}}>Logout</Button></>}
+  {userID && <><Button variant="secondary" className="mb-2" onClick={() => {setUserID(undefined); setShowAdminToggle(false); setIsAdmin(false); setShowID(undefined);window.location.reload();}}>Logout</Button></>}
   <LoginModal
               show={showLoginModal}
               onHide={() => setShowLoginModal(false)}
