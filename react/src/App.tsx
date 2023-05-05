@@ -11,7 +11,10 @@ import UserHeader from './components/UserHeader'
 import Shows from './pages/Shows'
 import UserProfile from './pages/UserProfile'
 import discs from './assets/discs.jpg'
-
+/*
+  Author: Samuel Torres
+  Description: Defines routes for react app
+*/
 
 
 function App() {

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-
+/*
+  Author: Samuel Torres
+  Description: React Hook to store showID in local storage and state
+*/
 const useLocalStorageShowID = (): [string | undefined, (value: string | undefined) => void] => {
   const [showID, setShowID] = useState<string | undefined>(() => {
     const storedShowID = localStorage.getItem('showID');

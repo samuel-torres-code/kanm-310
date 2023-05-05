@@ -12,7 +12,10 @@ import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useLocalStorageShowID from "../hooks/useLocalStorageShowID";
 import LoginModal from "./LoginModal";
 import useShowAdminToggle from "../hooks/useShowAdminToggle";
-
+/*
+Author: Samuel Torres
+Description: Makes a responsive header with a login functionality and admin togger
+*/
 function Header() {
 
   const [showAdminToggle, setShowAdminToggle] = useShowAdminToggle();
@@ -22,6 +25,10 @@ function Header() {
   const [userID, setUserID] = useLocalStorageUserID();
   const [showID, setShowID] = useLocalStorageShowID();
 
+  /*
+    Author: Samuel Torres
+    Description: Makes a request to the backend to verify login credentials
+  */
   const handleLogin = (username: string, password: string) => {
     fetch(
       `http://localhost/kanm-310/react/php/getUsers.php?function=getUserData&username=${username}&password=${password}`
