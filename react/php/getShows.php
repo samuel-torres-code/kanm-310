@@ -61,6 +61,7 @@ function getExtendedShowData($id) {
     $conn->close();
     
 }
+
 function getShowDataFromUser($u_id) {
   include_once './dbconfig.php';
   
@@ -72,6 +73,22 @@ function getShowDataFromUser($u_id) {
         $rows[] = $r;
     }
     echo json_encode($rows[0]);
+
+    $conn->close();
+    
+}
+
+function getHostUsersByShowId($show_id) {
+  include_once './dbconfig.php';
+
+  $sql = "SELECT * FROM show_hosts INNER JOIN users ON show_hosts.user_id = users.user_id WHERE show_hosts.show_id = {$show_id}";
+  $result = $conn->query($sql);
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    echo json_encode($rows);
 
     $conn->close();
     
@@ -112,6 +129,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     else {
       getShowDataFromUser(-1);
+    }
+    
+  }
+  if ($_GET['function'] === 'getHostUsersByShowId') {
+    // Call the function and return the result as a JSON object
+    if($_GET['id']) {
+      getHostUsersByShowId($_GET['id']);
+    }
+    else {
+      getHostUsersByShowId(-1);
     }
     
   }

@@ -223,6 +223,7 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
   axios.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));
+    window.location.reload();
   })
   .catch((error) => {
     console.log(error);
@@ -403,7 +404,9 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
           <Form.Label>Write a comment:</Form.Label>
           <Form.Control as="textarea" rows={3} value={comment} onChange={handleCommentChange} />
         </Form.Group>
-        <Button type="submit">Submit</Button>
+        <div className='py-2'>
+          <Button type="submit">Submit</Button>
+        </div>
       </Form> }
 
       <Table striped bordered hover>
