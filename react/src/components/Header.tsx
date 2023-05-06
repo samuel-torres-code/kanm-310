@@ -79,7 +79,7 @@ function Header() {
                   <Nav.Link>User Manager</Nav.Link>
                 </LinkContainer>
                 )}
-                {showID && 
+                {userID && 
                 <LinkContainer to="/profile">
                   <Nav.Link>My Profile</Nav.Link>
                 </LinkContainer>

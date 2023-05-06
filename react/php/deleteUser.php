@@ -15,6 +15,7 @@ function deleteUser($user_id) {
   include_once './dbconfig.php';
 
   $sql = "DELETE FROM users WHERE user_id = $user_id";
+  echo $sql;
   if (mysqli_query($conn, $sql)) {
     echo "User deleted successfully";
   } else {

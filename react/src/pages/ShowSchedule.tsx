@@ -425,7 +425,7 @@ function ShowSchedule() {
             Author: Elijah Sanders
             Description: Code for Add Show button.
             */
-            !isEditingDJs && !isAddingShow && !(typeof userID === "undefined") &&
+            !isEditingDJs && isAdmin && !isAddingShow && !(typeof userID === "undefined") &&
                 <div className='pb-2'>
                     <Button variant="primary" onClick={() => handleAddShowViewChange()}>
                         Add Show
