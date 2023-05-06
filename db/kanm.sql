@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 05, 2023 at 07:24 PM
+-- Host: 127.0.0.1
+-- Generation Time: May 06, 2023 at 05:25 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,30 +41,15 @@ CREATE TABLE `comments` (
 
 INSERT INTO `comments` (`comment_id`, `user_id`, `show_id`, `time_stamp`, `comment_text`) VALUES
 (1, 1, 2, '2023-04-15 19:11:35', 'THis shows is awesome adn cool!!! ;drop all tables;'),
-(2, 2, 2, '2023-05-02 22:07:46', 'hi'),
-(3, 5, 2, '2023-05-02 22:08:09', 'test'),
-(4, 5, 4, '2023-05-02 22:31:13', 'PORN'),
+(3, 5, 2, '2023-05-02 22:08:09', 'i really love this show!'),
 (5, 5, 4, '2023-05-02 22:31:54', 'r324543rwe'),
 (6, 5, 4, '2023-05-02 22:33:04', '2342'),
 (7, 1, 4, '2023-05-02 22:35:53', 'sam'),
 (8, 1, 4, '2023-05-02 22:39:19', 'swaos'),
-(9, 2, 4, '2023-05-02 22:39:46', 'doenut'),
-(10, 2, 2, '2023-05-02 22:41:03', 'samuel tores'),
-(11, 2, 2, '2023-05-02 22:42:51', 'comments'),
-(12, 2, 2, '2023-05-03 04:41:43', 'Swaos'),
-(13, 1, 2, '2023-05-03 04:44:08', 'sam'),
-(14, 1, 2, '2023-05-03 15:57:28', 'Sam'),
-(15, 1, 2, '2023-05-03 15:58:11', 'Saos'),
-(16, 1, 2, '2023-05-03 15:59:34', 'New Comment'),
-(17, 1, 2, '2023-05-03 16:00:45', 'New CommentSwaos'),
-(18, 1, 2, '2023-05-03 16:01:24', 'le'),
-(19, 1, 2, '2023-05-03 16:01:45', 'swaos'),
-(20, 2, 2, '2023-05-03 16:42:54', 'Sam'),
 (21, 5, 4, '2023-05-03 17:11:57', 'ayy'),
 (22, 1, 2, '2023-05-03 21:02:09', 'Awesome Comment'),
 (23, 5, 4, '2023-05-03 21:37:24', 'le'),
-(24, 1, 4, '2023-05-03 21:37:44', 'sam'),
-(25, 1, 2, '2023-05-04 17:24:22', 'le');
+(24, 1, 4, '2023-05-03 21:37:44', 'sam');
 
 -- --------------------------------------------------------
 
@@ -178,10 +163,8 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`show_id`, `show_name`, `show_desc`, `show_pic`, `start_time`, `end_time`, `day_of_week`) VALUES
-(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy and Liameister swaos', 'https://cdn.wallpapersafari.com/50/3/rNa1x2.jpg', '2023-04-16 13:00:00', '2023-04-16 14:00:00', 2),
-(4, '60minutesofsilence', 'music🎶🎶🎶 le le le', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 5),
-(6, 'Awesome', 'Le', 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg', '2022-03-15 04:00:00', '2022-03-15 05:00:00', 2),
-(7, 'Sam\'s Life', 'This is sam\'s LIFE', 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80', '2002-03-25 08:00:00', '2002-03-25 09:00:00', 1);
+(2, 'BAM! Cookin\' with Sam!', 'The hottest tunes from DJ Sammy', 'https://media.istockphoto.com/id/1154897010/photo/very-tall-cheeseburger-isolated-on-white.jpg?s=1024x1024&w=is&k=20&c=AWqkbBxjzIQWkK9fXlAkm39jQNruQeG4KK-prtFX464=', '2024-04-16 12:00:00', '2024-04-16 13:00:00', 2),
+(4, '60minutesofsilence', 'music🎶🎶🎶', 'https://cdn.discordapp.com/attachments/135519322670891009/1103055376498299011/Screenshot_20220428-214457_Instagram.jpg', '2023-05-02 16:00:00', '2023-05-02 17:00:00', 2);
 
 -- --------------------------------------------------------
 
@@ -200,11 +183,7 @@ CREATE TABLE `show_hosts` (
 
 INSERT INTO `show_hosts` (`user_id`, `show_id`) VALUES
 (1, 2),
-(1, 7),
-(2, 2),
-(5, 2),
-(5, 4),
-(5, 7);
+(5, 4);
 
 -- --------------------------------------------------------
 
@@ -256,11 +235,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `first_name`, `last_name`, `is_admin`, `is_dj`) VALUES
 (1, 'raacecar246', 'password', 'torres.sam@tamu.edu', 'Sam', 'Torres', 1, 1),
-(2, 'dogenut', 'password', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 1),
-(3, 'dogenut', '$2y$10$p.ZZXbMs5hfEVTwodKPMhO7y1HDEwHHlX4CTtyFMGJP.xX4np.BEW', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
-(4, 'dogenut', '$2y$10$mH0c1hq9lIjKHGUT92ZA1Oo0VKdi3ongSnBLtX4zxNR6adZ.2P63u', 'torres.samalt@gmail.com', 'Sam', 'Torres', 0, 0),
 (5, 'liamrams', 'liamrams', 'liamrams@tamu.edu', 'Liam', 'Ramsey', 0, 1),
-(6, 'root', '', 'elijah@tamu.edu', 'Elijah', 'Yomama', 0, 0);
+(6, 'scriptedfire', 'pword', 'elijah@tamu.edu', 'Elijah', 'Yomama', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -397,7 +373,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `sets`
@@ -409,7 +385,7 @@ ALTER TABLE `sets`
 -- AUTO_INCREMENT for table `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `show_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tracks`
@@ -421,7 +397,7 @@ ALTER TABLE `tracks`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
