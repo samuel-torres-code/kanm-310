@@ -37,6 +37,9 @@ function Shows() {
   const [newName, setNewName] = useState<string>(showData.show_name);
   const [newDesc, setNewDesc] = useState<string>(showData.show_desc);
   const [newPic, setNewPic] = useState<string>(showData.show_pic);
+  const [newShowStart, setNewShowStart] = useState<string>()
+  const [newShowHour, setNewShowHour] = useState<string>()
+  const [newShowDuration, setNewShowDuration] = useState<string>()
   const [showSets, setShowSets] = useState<ShowSets>({});
 
   const [showID, setShowID] = useLocalStorageShowID();
@@ -51,7 +54,6 @@ function Shows() {
   const handleCommentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(event.target.value);
   };
-
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -161,8 +163,30 @@ function Shows() {
   }
 
   /*
-    Author: Samuel Torres
-    Description: Grabs show and DJ info from DB on page load
+  Author: Elijah Sanders
+  Description: Function to assist with loading scheduling state for edit window
+  */
+  const getDatetimeValuesHelper = (startDatetimeStr : string | undefined, endDatetimeStr : string | undefined) => {
+    if(typeof startDatetimeStr === "undefined") {
+      return ""
+    }
+    if(typeof endDatetimeStr === "undefined") {
+      return ""
+    }
+
+    let [dateStr, timeStr] = startDatetimeStr.split(' ')
+    let splitUpDate = dateStr.split('-')
+    let splitUpTime = timeStr.split(':')
+    let displayStr = splitUpDate[1] + "/" + splitUpDate[2] + "/" + splitUpDate[0]
+    let startHourStr = splitUpTime[0]
+    let duration = Number(endDatetimeStr.split(' ')[1].split(':')[0]) - Number(startHourStr)
+
+    return [displayStr, startHourStr, duration]
+  }
+
+  /*
+    Author: Samuel Torres and Elijah Sanders
+    Description: Grabs show and DJ info from DB on page load and initializes some edit scheduling state
   */
   useEffect(() => {
     // Make a GET request to the PHP backend function
@@ -181,6 +205,10 @@ function Shows() {
         setNewName(data[0].show_name);
         setNewDesc(data[0].show_desc);
         setNewPic(data[0].show_pic);
+        let [displayStr, startHourStr, duration] = getDatetimeValuesHelper(data[0].start_time, data[0].end_time)
+        setNewShowStart(String(displayStr))
+        setNewShowHour(String(startHourStr))
+        setNewShowDuration(String(duration))
         fetch(`http://localhost/kanm-310/react/php/getSets.php?function=getSetsByShowID&id=${id}`)
   .then(response => response.json())
   .then(data => {setShowSets( data.reduce((acc: ShowSets, curr: SongPlay) => {
@@ -192,6 +220,7 @@ function Shows() {
     console.log("test", acc, curr)
     return acc;
   }, {}) );
+
   setIsLoading(false);});
         
       }
@@ -253,14 +282,42 @@ const handlePicChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   setNewPic(e.target.value);
 };
 
+const handleShowStartChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setNewShowStart(e.target.value);
+};
+
+const handleShowHourChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setNewShowHour(e.target.value);
+};
+
+const handleShowDurationChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setNewShowDuration(e.target.value);
+};
+
 /*
-    Author: Samuel Torres
+    Author: Samuel Torres and Elijah Sanders
     Description: Sends updated show information to the DB for updating
 */
 const handleShowSubmit = () => {
   setIsLoading(true);
-  setShowData({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});
-  let data = JSON.stringify({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic});
+
+  let startDateStr = typeof newShowStart === "string" ? newShowStart : ''
+  let [startMonth, startDay, startYear] = startDateStr.split('/')
+  let startHour = typeof newShowHour === "string" ? newShowHour : ''
+  let startDate = new Date(
+      +startYear,
+      +startMonth - 1,
+      +startDay,
+      +startHour
+  )
+  let endDate = new Date(startDate.getTime() + Number(newShowDuration) * 60 * 60 * 1000)
+  let sqlStartDatetime = startYear + '-' + startMonth + '-' + startDay + ' ' + startHour + ':00:00'
+  let sqlEndDatetime = String(endDate.getFullYear()) + '-' + String(endDate.getMonth() + 1) + '-' + String(endDate.getDate()) + ' ' + String(endDate.getHours()).padStart(2) + ':00:00'
+
+  setShowData({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic, start_time: sqlStartDatetime,
+    end_time: sqlEndDatetime, day_of_week: startDate.getDay()});
+  let data = JSON.stringify({...showData, show_name: newName,show_desc: newDesc, show_pic: newPic, 
+    start_time: sqlStartDatetime, end_time: sqlEndDatetime, day_of_week: startDate.getDay()});
       
       let config = {
         method: 'post',
@@ -411,14 +468,42 @@ const handlePlayDelete = (set_id : string, track_id : string) => {
             />
             </Form.Group>
             
-            
-            
             <Form.Group className="mb-3" >
               <Form.Label>Show Description</Form.Label>
               <Form.Control
               as="textarea"
               value={newDesc}
               onChange={handleDescChange}
+              maxLength={255}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3" >
+              <Form.Label>Start Date (MM/DD/YY)</Form.Label>
+              <Form.Control
+              as="textarea"
+              value={newShowStart}
+              onChange={handleShowStartChange}
+              maxLength={255}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3" >
+              <Form.Label>Start Hour (HH)</Form.Label>
+              <Form.Control
+              as="textarea"
+              value={newShowHour}
+              onChange={handleShowHourChange}
+              maxLength={255}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3" >
+              <Form.Label>Duration In Hours</Form.Label>
+              <Form.Control
+              as="textarea"
+              value={newShowDuration}
+              onChange={handleShowDurationChange}
               maxLength={255}
             />
             </Form.Group>

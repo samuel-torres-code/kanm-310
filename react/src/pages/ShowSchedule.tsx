@@ -197,9 +197,9 @@ function ShowSchedule() {
             +startDay,
             +startHour
         )
-        let endHour = String(Number(newShowDuration) + Number(startHour))
+        let endDate = new Date(startDate.getTime() + Number(newShowDuration) * 60 * 60 * 1000)
         let sqlStartDatetime = '\"' + startYear + '-' + startMonth + '-' + startDay + ' ' + startHour + ':00:00\"'
-        let sqlEndDatetime = '\"' + startYear + '-' + startMonth + '-' + startDay + ' ' + endHour + ':00:00\"'
+        let sqlEndDatetime = '\"' + String(endDate.getFullYear()) + '-' + String(endDate.getMonth() + 1) + '-' + String(endDate.getDate()) + ' ' + String(endDate.getHours()).padStart(2) + ':00:00\"'
         let data = JSON.stringify({show_name: '\"' + newShowName + '\"', show_desc: '\"' + newShowDescription + '\"',
             show_pic: '\"' + newShowPicture + '\"', start_time: sqlStartDatetime, end_time: sqlEndDatetime, 
             day_of_week: startDate.getDay(), user_id: userID});
