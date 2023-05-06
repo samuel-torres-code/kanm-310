@@ -1,5 +1,8 @@
 <?php
-
+/* 
+  Author: Charlotte Harrington and Elijah Sanders
+  Description: Creates an API endpoint that handles various select statements for the users table
+*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");

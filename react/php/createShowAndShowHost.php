@@ -1,4 +1,10 @@
 <?php
+/* 
+    Author: Elijah Sanders
+    Description: Creates an API endpoint that handles create statements for the shows table.
+                 Also creates an initial show host linked to the created show.
+
+*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
