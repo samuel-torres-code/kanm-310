@@ -16,7 +16,7 @@ $show_pic,
 $start_time,
 $end_time,
 $day_of_week) {
-  // Create a connection to the database
+
   include_once "./dbconfig.php";
 
     $show_id = mysqli_real_escape_string($conn, $show_id);

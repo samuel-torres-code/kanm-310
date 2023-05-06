@@ -5,17 +5,21 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"); 
 
-function createUser($username, $password, $email, $first_name, $last_name) {
+/* 
+    Author: Charlotte Harrington
+    Description: This is a php backend function that takes user data as parameters to create a new user.
+*/
+function createUser($uname, $pword, $email, $first_name, $last_name) {
     include_once './dbconfig.php';
 
     // sanitize
-    $username=htmlspecialchars(strip_tags($username));
-    $password=htmlspecialchars(strip_tags($password));
+    $uname=htmlspecialchars(strip_tags($uname));
+    $pword=htmlspecialchars(strip_tags($pword));
     $email=htmlspecialchars(strip_tags($email));
     $first_name=htmlspecialchars(strip_tags($first_name));
     $last_name=htmlspecialchars(strip_tags($last_name));
 
-    $query = "INSERT INTO users SET username='{$username}', password='{$password}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}'";
+    $query = "INSERT INTO users SET username='{$uname}', password='{$pword}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}'";
 
     echo json_encode($query);
         
@@ -35,13 +39,13 @@ $data = json_decode(file_get_contents("php://input"));
 $first_name = $data->first_name;
 $last_name = $data->last_name;
 $email = $data->email;
-$password = $data->password;
-$username = $data->username;
+$pword = $data->password;
+$uname = $data->username;
 // $user_id = $data->user_id;
 
 // echo $username;
 // Call the updateUser function with the provided parameters
-if(!empty($first_name) && !empty($last_name) && !empty($username) && !empty($email) && !empty($password)){
-    createUser($username, $password, $email, $first_name, $last_name);
+if(!empty($first_name) && !empty($last_name) && !empty($uname) && !empty($email) && !empty($pword)){
+    createUser($uname, $pword, $email, $first_name, $last_name);
 }
 ?>

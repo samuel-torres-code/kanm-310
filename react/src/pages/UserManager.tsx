@@ -10,8 +10,8 @@ import AddIcon from '@mui/icons-material/Add';
 import useAdmin from "../hooks/useAdmin";
 import { User } from "./types";
 /*
-Author:
-Description:
+  Author: Charlotte Harrington
+  Description: This page displays a table of member information, only accessible by admins. Admins can update or delete users, as well as create new users in this view.
 */
 
 function UserManager(){
@@ -110,7 +110,6 @@ const deleteUser = (userId: number) => {
   };
 
   useEffect(() => {
-      // Make a GET request to the PHP backend function
       fetch('http://localhost/kanm-310/react/php/getUsers.php?function=getUsers')
       .then(response => response.json())
       .then(data => setUsers(data));
@@ -149,19 +148,13 @@ const deleteUser = (userId: number) => {
   };
 
   const handleSaveUser = () => {
-    // Find the edited user object
     const editedUser = users.find((user) => user.user_id === editingUser);
-  
-    // Call the updateUser function with the edited user object
     updateUser(editedUser);
-  
     setEditingUser(null);
   };
 
   const handleCreateUser = () => {
-    // Call the PHP function to create a new user
     createUser(newUser);
-    // Add the new user to the list of users and stop adding a new user
     setUsers([...users, newUser]);
     setAddingUser(false);
   };  

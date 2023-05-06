@@ -6,13 +6,11 @@ import { User } from './types';
 import useLocalStorageUserID from '../hooks/useLocalStorageUserID';
 import axios from "axios";
 /*
-Author:
-Description:
+    Author: Charlotte Harrington
+    Description: This page displays a user's own information, viewable and editable by only the user themself. Only accessible if logged in. 
 */
 
 function UserProfile(){ 
-
-    // const { id } = useParams<{id: string}>();
 
     const defaultUser: User = {
         user_id: -1,
@@ -31,7 +29,6 @@ function UserProfile(){
     const [isLoading, setIsLoading] = useState<Boolean>(true);
 
     useEffect(() => {
-    // Make a GET request to the PHP backend function
     fetch(`http://localhost/kanm-310/react/php/getUsers.php?function=getUserDataID&id=${userID}`)
     .then(response => response.json())
     .then(data => {
@@ -44,7 +41,6 @@ function UserProfile(){
     }, []);
     useEffect(() => {
     setIsLoading(true);
-    // Make a GET request to the PHP backend function
     fetch(`http://localhost/kanm-310/react/php/getUsers.php?function=getUserDataID&id=${userID}`)
     .then(response => response.json())
     .then(data => {
@@ -84,7 +80,6 @@ function UserProfile(){
 
   const handleSaveClick = () => {
     setIsEditMode(false);
-    // Save changes to profile
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,15 +91,8 @@ function UserProfile(){
   };
 
   const handleSaveUser = () => {
-    // Find the edited user object
-    // const editedUser = users.find((user) => user.user_id === editingUser);
-  
-    // Call the updateUser function with the edited user object
     updateUser(profile);
     setIsEditMode(false);
-
-  
-    // setEditingUser(null);
   };
 
   return (
