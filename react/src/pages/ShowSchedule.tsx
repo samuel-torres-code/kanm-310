@@ -6,12 +6,19 @@ import internal from 'stream';
 import { ShowData, User, UserShowData } from './types';
 import useLocalStorageUserID from "../hooks/useLocalStorageUserID";
 import useAdmin from '../hooks/useAdmin.js';
+
 /*
-Author:
-Description:
+Author: Elijah Sanders and Liam Ramsey
+Description: Displays shows, allows logged in users to add new shows, and allows admins to 
+             remove shows and manage DJs on shows.
 */
 
 function ShowSchedule() {
+    /*
+    Author: Elijah Sanders and Liam Ramsey
+    Description: State for the page's various functions
+    */
+
     // shows for show table
     const [shows, setShows] = useState<ShowData[]>([]);
     // hosts for editing hosts on a show
@@ -38,6 +45,11 @@ function ShowSchedule() {
     // UserID for creating new show
     const [userID, setUserID] = useLocalStorageUserID()
 
+    /*
+    Author: Liam Ramsey
+    Description: Loads shows into state.
+    */
+
     useEffect(() => {
         // Make a GET request to the PHP backend function
         fetch('http://localhost/kanm-310/react/php/getShows.php?function=getShows')
@@ -45,9 +57,20 @@ function ShowSchedule() {
         .then(data => setShows(data));
     }, []);
 
+    /*
+    Author: Elijah Sanders
+    Description: Currently unused, for debugging UI.
+    */
+
     const handleTest = () => {
         console.log("test")
     }
+
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when an admin clicks Edit DJs on a show.
+                 Loads state for the editing DJs view.
+    */
 
     const handleEditDJs = (show: ShowData) => {
         fetch(`http://localhost/kanm-310/react/php/getShows.php?function=getHostUsersByShowId&id=${show.show_id}`)
@@ -63,6 +86,12 @@ function ShowSchedule() {
         setEditingShow(show)
         setIsEditingDJs(true)
     }
+
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when an admin clicks Delete on a DJ on a show.
+                 Removes the deleted DJ from the show.
+    */
 
     const handleRemoveDJ = (show_id: string | undefined, user_id: number) => {
         // check for if show is undefined
@@ -89,6 +118,12 @@ function ShowSchedule() {
         });
     }
 
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when an admin clicks Add DJ in the editing DJs view.
+                 Switches views and loads DJs not on that show that can be added to it.
+    */
+
     const handleAddDJViewChange = (show_id : string | undefined) => {
         // check for if show is undefined
         show_id = typeof show_id === "string" ? show_id : "-1"
@@ -105,6 +140,12 @@ function ShowSchedule() {
 
         setIsAddingDJ(true)
     }
+
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when an admin clicks Add DJ on a DJ in the adding DJs view.
+                 Adds a DJ to the show for which the list of DJs is being edited.
+    */
 
     const handleAddDJ = (show_id: string | undefined, user_id: number) => {
         // check for if show is undefined
@@ -131,9 +172,20 @@ function ShowSchedule() {
         });
     }
 
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when a logged in user clicks Add Show. Switches views.
+    */
+
     const handleAddShowViewChange = () => {
         setIsAddingShow(true)
     }
+
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when a logged in user clicks Confirm in the adding a show view.
+                 Gets user inputs and creates a new show with them.
+    */
 
     const handleAddShow = () => {
         let startDateStr = typeof newShowStart === "string" ? newShowStart : ''
@@ -172,6 +224,11 @@ function ShowSchedule() {
         });
     }
 
+    /*
+    Author: Elijah Sanders
+    Description: Button action for when a user clicks Delete
+    */
+
     const handleRemoveShow = (show_id: string | undefined) => {
         // check for if show is undefined
         show_id = typeof show_id === "string" ? show_id : "-1"
@@ -196,6 +253,11 @@ function ShowSchedule() {
             console.log(error);
         });
     }
+
+    /*
+    Author: Elijah Sanders
+    Description: The following three functions allow for returning to the previous view.
+    */
     
     const handleReturnFromDJ = () => {
         setIsEditingDJs(false)
@@ -211,10 +273,17 @@ function ShowSchedule() {
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    // views are organized by how many steps they take to reach, from most to least
+    /*
+    Author: Elijah Sanders and Liam Ramsey
+    Description: Views are organized by how many steps they take to reach, from most to least.
+    */
     return (
         <div>
-            {// code for title and Add DJ button when adding a new DJ
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for title and Add DJ button when adding a new DJ.
+            */
             isAddingDJ &&
                 <div className='pb-2'>
                     <p>{"Currently editing DJs for " + editingShow?.show_name}</p>
@@ -223,7 +292,11 @@ function ShowSchedule() {
                     </Button>
                 </div>
             }
-            {// code for view when adding a new DJ
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for view when adding a new DJ.
+            */
             isAddingDJ &&
             <Table striped bordered hover>
                 <thead>
@@ -256,7 +329,11 @@ function ShowSchedule() {
                 </tbody>
             </Table>
             }
-            {// code for title and Add DJ button when adding/removing DJ
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for title and Add DJ button when adding/removing DJ.
+            */
             !isAddingDJ && isEditingDJs &&
                 <div className='pb-2'>
                     <p>{"Currently editing DJs for " + editingShow?.show_name}</p>
@@ -269,7 +346,11 @@ function ShowSchedule() {
                     </Button>
                 </div>
             }
-            {// code for view when adding/removing DJ
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for view when adding/removing DJ.
+            */
             !isAddingDJ && isEditingDJs &&
                 <Table striped bordered hover>
                     <thead>
@@ -302,7 +383,11 @@ function ShowSchedule() {
                     </tbody>
                 </Table>
             }
-            {// code for Add/Cancel when adding a new show
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for Add/Cancel when adding a new show.
+            */
             isAddingShow &&
                 <div className='pb-2'>
                     <Button variant="primary" onClick={() => handleAddShow()}>
@@ -314,7 +399,11 @@ function ShowSchedule() {
                     </Button>
                 </div>
             }
-            {// code for view when adding a new show
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for view when adding a new show.
+            */
             isAddingShow &&
                 <div className='pb-2'>
                     <p>Show Name: </p>
@@ -331,7 +420,11 @@ function ShowSchedule() {
                     <input type="text" value={newShowPicture} onChange={event => setNewShowPicture(event.target.value)} />
                 </div>
             }
-            {// code for Add Show button
+            {
+            /*
+            Author: Elijah Sanders
+            Description: Code for Add Show button.
+            */
             !isEditingDJs && !isAddingShow && !(typeof userID === "undefined") &&
                 <div className='pb-2'>
                     <Button variant="primary" onClick={() => handleAddShowViewChange()}>
@@ -339,7 +432,11 @@ function ShowSchedule() {
                     </Button>
                 </div>
             }
-            {// code for regular schedule view
+            {
+            /*
+            Author: Elijah Sanders and Liam Ramsey
+            Description: Code for regular schedule view
+            */
             !isEditingDJs && !isAddingShow &&
                 <Table striped bordered hover>
                     <thead>

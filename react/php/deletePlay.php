@@ -1,7 +1,8 @@
 <?php
   /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
+    Author: Elijah Sanders
+    Description: Creates an API endpoint that handles delete statements for the plays table.
+                 Ultimately unused as functionality was deemed not part of plan.
     
 */
 header("Access-Control-Allow-Origin: *");

@@ -1,7 +1,7 @@
 <?php
   /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
+    Author: Charlotte Harrington and Elijah Sanders
+    Description: Creates an API endpoint that handles various select statements for the users table
     
 */
 header("Access-Control-Allow-Origin: *");
