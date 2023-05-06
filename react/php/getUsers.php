@@ -1,9 +1,5 @@
 <?php
-  /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
-    
-*/
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
@@ -96,23 +92,17 @@ function getUsersNotHostingShow($show_id) {
     
 }
 
-// Check if the request method is GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  // Check if the request is for the getCurrentDateTime function
   if ($_GET['function'] === 'getUsers') {
-    // Call the function and return the result as a JSON object
     getUsers();
   }
   if ($_GET['function'] === 'getUserDataID') {
-    // Call the function and return the result as a JSON object
     getUserDataID($_GET['id']);
   }
   if ($_GET['function'] === 'getUsersNotHostingShow') {
-    // Call the function and return the result as a JSON object
     getUsersNotHostingShow($_GET['id']);
   }
   if ($_GET['function'] === 'getUserData') {
-    // Call the function and return the result as a JSON object
     if($_GET['username'] and $_GET['password']) {
       getUserData($_GET['username'],$_GET['password']);
     }

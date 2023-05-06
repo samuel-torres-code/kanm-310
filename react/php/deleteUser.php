@@ -1,7 +1,7 @@
 <?php
   /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
+    Author: Charlotte Harrington
+    Description: Creates an API endpoint that handles delete statements for the user table.
     
 */
 header("Access-Control-Allow-Origin: *");
@@ -13,18 +13,14 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 function deleteUser($user_id) {
   
   include_once './dbconfig.php';
-  
-  //SQL query
+
   $sql = "DELETE FROM users WHERE user_id = $user_id";
-  
-  // Execute the query
   if (mysqli_query($conn, $sql)) {
     echo "User deleted successfully";
   } else {
     echo "Error deleting user: " . mysqli_error($conn);
   }
   
-  // Close the connection
   mysqli_close($conn);
   
 }

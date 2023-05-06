@@ -1,9 +1,4 @@
 <?php
-  /* 
-    Author: 
-    Description: Creates an API endpoint that handles <> statements for the <> table
-    
-*/
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
@@ -12,12 +7,11 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 /* 
     Author: Charlotte Harrington
-    Description: This is a backend function that 
+    Description: This is a backend API endpoint that takes a set of input user data, along with a fixed user_id, and updates the user identified by ID accordingly.
 */
 function updateUser($user_id, $uname, $pword, $email, $first_name, $last_name) {
   include_once './dbconfig.php';
 
-  // Update the row in the 'user' table
   $sql = "UPDATE users SET username='{$uname}', password='{$pword}', email='{$email}', first_name='{$first_name}', last_name='{$last_name}' WHERE user_id={$user_id}";
 
   echo json_encode($sql);
@@ -35,8 +29,6 @@ $password = $data->password;
 $username = $data->username;
 $user_id = $data->user_id;
 
-
-// Call the updateUser function with the provided parameters
 updateUser($user_id, $username, $password, $email, $first_name, $last_name);
 
 ?>
